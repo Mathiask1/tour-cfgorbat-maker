@@ -1,0 +1,45 @@
+[
+    {
+        "cfgName": "1stDiv",
+        "id": 4,
+        "idType": "",
+        "side": "",
+        "size": "",
+        "type": "",
+        "commander": "",
+        "commanderRank": "",
+        "text": "2",
+        "textShort": "",
+        "description": "",
+        "subordinates": [
+            {
+                "cfgName": "1stBattalion",
+                "id": 4,
+                "idType": "",
+                "side": "",
+                "size": "",
+                "type": "",
+                "commander": "",
+                "commanderRank": "",
+                "text": "3",
+                "textShort": "",
+                "description": "",
+                "subordinates": []
+            }
+        ]
+    },
+    {
+        "cfgName": "2ndDiv",
+        "id": 4,
+        "idType": "",
+        "side": "",
+        "size": "",
+        "type": "",
+        "commander": "",
+        "commanderRank": "",
+        "text": "1",
+        "textShort": "",
+        "description": "",
+        "subordinates": []
+    }
+]
