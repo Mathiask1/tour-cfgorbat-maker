@@ -1,7 +1,7 @@
 {
   "name": "tour-orbat-maker",
   "version": "0.1.0",
-  "homepage": "https://mathiask1.github.io/tour-cfg-orbatmaker",
+  "homepage": "https://mathiask1.github.io/tour-cfgorbat-maker/",
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^5.17.0",

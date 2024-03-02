@@ -1,5 +1,5 @@
 //app.js
-
+import data from './Data.json';
 import React, { useState, useEffect } from 'react';
 import OrgChart from './components/OrgChart';
 import Sidebar from './components/Sidebar';
@@ -30,8 +30,7 @@ const App = () => {
   }, []);
 
   const fetchOrgData = async () => {
-    const response = await fetch('Data.json');
-    return await response.json();
+    return  data;
   };
 
 
