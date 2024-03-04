@@ -30,7 +30,7 @@ const App = () => {
   }, []);
 
   const fetchOrgData = async () => {
-    return  data;
+    return data;
   };
 
 
@@ -42,10 +42,6 @@ const App = () => {
       });
     }
     return ids;
-  };
-
-  const handleNodeClick = (nodeData) => {
-    setSelectedNode(nodeData);
   };
 
   const updateNodeData = (editedNodeData) => {
@@ -98,7 +94,6 @@ const App = () => {
       } else {
         newNodeData.subordinates = [];
         if (orgData.length === 0) {
-
           setOrgData([newNodeData]);
           saveToSessionStorage([newNodeData]);
         } else if (!selectedNode) {
@@ -113,8 +108,6 @@ const App = () => {
       }
     });
   };
-
-
 
   const addNodeToSelectedNode = (selectedNode, newNodeData, data) => {
     return data.map(node => {
@@ -153,7 +146,7 @@ const App = () => {
           <OrgChart data={orgData} setSelectedNode={setSelectedNode} selectedNode={selectedNode} />
         </div>
       </div>
-          <Converter data={orgData} setOrgData={setOrgData} fetchOrgData={fetchOrgData} saveToSessionStorage={saveToSessionStorage} />
+      <Converter data={orgData} setOrgData={setOrgData} fetchOrgData={fetchOrgData} saveToSessionStorage={saveToSessionStorage} />
     </div>
   );
 
