@@ -6,8 +6,6 @@ import Sidebar from './components/Sidebar';
 import './styles/App.css';
 import Converter from './components/Converter';
 
-
-// Main App component
 const App = () => {
   const [orgData, setOrgData] = useState([]);
   const [selectedNode, setSelectedNode] = useState(null);
@@ -43,6 +41,14 @@ const App = () => {
     }
     return ids;
   };
+
+  const handleDrag = ({draggedNodeData, targetNode}) => {
+    console.log(targetNode);
+    const updatedData = addNodeToSelectedNode(selectedNode, draggedNodeData, orgData);
+/*    setOrgData(updatedData);
+    saveToSessionStorage(updatedData);
+*/    console.log(updatedData);
+  }
 
   const updateNodeData = (editedNodeData) => {
     const updatedOrgData = updateNodeInData(orgData, editedNodeData, selectedNode);
@@ -143,7 +149,7 @@ const App = () => {
             onNodeAdd={addNode} />
         </div>
         <div className="org-chart">
-          <OrgChart data={orgData} setSelectedNode={setSelectedNode} selectedNode={selectedNode} />
+          <OrgChart data={orgData} setSelectedNode={setSelectedNode} selectedNode={selectedNode} handleDragData={handleDrag}/>
         </div>
       </div>
       <Converter data={orgData} setOrgData={setOrgData} fetchOrgData={fetchOrgData} saveToSessionStorage={saveToSessionStorage} />
