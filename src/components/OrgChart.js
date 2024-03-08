@@ -9,7 +9,7 @@ const OrgChart = ({ data, setSelectedNode, selectedNode }) => {
         const handleClickInside = (event) => {
             console.log(event.target.classList);
 
-            if (!event.target.classList.contains('nodeDiv') && event.target.classList.contains("org-chart") || event.target.classList.contains("nodeWrapper")) {
+            if (!event.target.classList.contains('nodeDiv') && (event.target.classList.contains("org-chart") || event.target.classList.contains("nodeWrapper"))) {
                 // Click is not on a node, deselect the selected node
                 setSelectedNode(null); // Deselect the selected node
             }
