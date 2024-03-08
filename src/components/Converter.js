@@ -2,7 +2,7 @@ import React, { useState, useRef  } from 'react';
 import '../styles/App.css';
 
 // Import the conversion utility functions
-import { convertJsonToCfgORBAT } from '../utils/convert.js'; // Update the path as per your file structure
+import { convertJsonToCfgORBAT } from '../utils/jsontocfg.js'; // Update the path as per your file structure
 import { convertToJson } from '../utils/cfgtojson.js';
 
 const Converter = ({ data, setOrgData, fetchOrgData, saveToSessionStorage }) => {
