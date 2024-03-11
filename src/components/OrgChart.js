@@ -1,14 +1,23 @@
 //Orgchart.js
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import Node from './Node';
 import '../styles/App.css';
 
-const OrgChart = ({ data, setSelectedNode, selectedNode, handleDragData }) => {
+const OrgChart = ({ data, setSelectedNode, selectedNode, handleDrag, getNodeData }) => {
+    const [draggedNode, setDraggedNode] = useState(null);
+    const [droppedNode, setDroppedNode] = useState(null);
+    
     const orgChartRef = useRef(null);
+
+    const handleDragUtil = () => {
+        //console.log("dragged", draggedNode,"dropped", droppedNode);
+        //setSelectedNode(droppedNode);
+        handleDrag({ draggedNode: draggedNode, droppedNode: droppedNode });
+    };
 
     useEffect(() => {
         const handleClickInside = (event) => {
-            console.log(event.target.classList);
+            //console.log(event.target.classList);
             if (!event.target.classList.contains('nodeDiv') && (event.target.classList.contains("org-chart") || event.target.classList.contains("nodeWrapper"))) {
                 // Click is not on a node, deselect the selected node
                 setSelectedNode(null); // Deselect the selected node
@@ -25,11 +34,17 @@ const OrgChart = ({ data, setSelectedNode, selectedNode, handleDragData }) => {
     }, [setSelectedNode]);
 
     return (
-
         <div ref={orgChartRef}>
             <h2>Order of Battle</h2>
             {data.map((nodeData) => (
-                <Node key={nodeData.cfgName} data={nodeData} onClick={setSelectedNode} selectedNode={selectedNode} handleDragData={handleDragData} />
+                <Node key={nodeData.cfgName} 
+                data={nodeData} 
+                onClick={setSelectedNode} 
+                selectedNode={selectedNode} 
+                handleDrag={handleDragUtil} 
+                setDraggedNode={setDraggedNode}
+                setDroppedNode={setDroppedNode}
+                getNodeData={getNodeData}/>
             ))}
         </div>
     );

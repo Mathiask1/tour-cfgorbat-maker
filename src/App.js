@@ -42,13 +42,24 @@ const App = () => {
     return ids;
   };
 
-  const handleDrag = ({draggedNodeData, targetNode}) => {
-    console.log(targetNode);
-    const updatedData = addNodeToSelectedNode(selectedNode, draggedNodeData, orgData);
-/*    setOrgData(updatedData);
-    saveToSessionStorage(updatedData);
-*/    console.log(updatedData);
-  }
+  const handleDrag = ({draggedNode, droppedNode}) => {
+    if (orgData) {
+      console.log("draggedNodeData", draggedNode);
+      let updatedData = deleteNodeData(draggedNode.cfgName);
+      
+      updatedData = addNodeToSelectedNode({selectedNode: droppedNode, newNodeData: draggedNode, orgData});
+      console.log("dropppppp",droppedNode);
+      console.log("test",updatedData);
+      setOrgData(updatedData);
+      saveToSessionStorage(updatedData);
+
+    } else {
+      console.log("undefinedddd");
+    };
+    
+/*     saveToSessionStorage(updatedData);
+*/    //console.log(updatedData);
+  };
 
   const updateNodeData = (editedNodeData) => {
     const updatedOrgData = updateNodeInData(orgData, editedNodeData, selectedNode);
@@ -71,21 +82,21 @@ const App = () => {
     });
   };
 
-  const deleteNodeData = (idToDelete) => {
-    const updatedData = deleteNodeDataUtil(idToDelete, orgData);
-    if (selectedNode && selectedNode.cfgName === idToDelete) {
+  const deleteNodeData = (cfgName) => {
+    const updatedData = deleteNodeDataUtil(cfgName, orgData);
+    if (selectedNode && selectedNode.cfgName === cfgName) {
       setSelectedNode(null);
     }
     setOrgData(updatedData);
     saveToSessionStorage(updatedData);
   };
 
-  const deleteNodeDataUtil = (idToDelete, data) => {
+  const deleteNodeDataUtil = (cfgName, data) => {
     return data.reduce((acc, unit) => {
-      if (unit.cfgName === idToDelete) {
+      if (unit.cfgName === cfgName) {
         return acc;
       }
-      const subordinates = unit.subordinates ? deleteNodeDataUtil(idToDelete, unit.subordinates) : [];
+      const subordinates = unit.subordinates ? deleteNodeDataUtil(cfgName, unit.subordinates) : [];
       return [...acc, { ...unit, subordinates }];
     }, []);
   };
@@ -106,7 +117,7 @@ const App = () => {
           setOrgData([...orgData, newNodeData]);
           saveToSessionStorage([...orgData, newNodeData]);
         } else {
-          const updatedData = addNodeToSelectedNode(selectedNode, newNodeData, orgData);
+          const updatedData = addNodeToSelectedNode(selectedNode, newNodeData);
           setOrgData(updatedData);
           saveToSessionStorage(updatedData);
         }
@@ -115,7 +126,28 @@ const App = () => {
     });
   };
 
-  const addNodeToSelectedNode = (selectedNode, newNodeData, data) => {
+  const getNodeData = (cfgName, nodes = orgData) => {
+    let returnNode;
+    nodes.forEach(node => {
+      //console.log("node", node.cfgName, "cfg", cfgName);
+  
+      if (returnNode) {
+        return; // If the node has already been found, exit the loop
+      }
+  
+      if (cfgName === node.cfgName) {
+        returnNode = node;
+      } else if (node.subordinates && node.subordinates.length > 0) {
+        // If the node has subordinates, recursively search within them
+        returnNode = getNodeData(cfgName, node.subordinates);
+      }
+    });
+  
+    return returnNode;
+  };
+  
+
+  const addNodeToSelectedNode = (selectedNode, newNodeData, data=orgData) => {
     return data.map(node => {
       if (node.cfgName === selectedNode.cfgName) {
         const updatedNode = {
@@ -149,10 +181,17 @@ const App = () => {
             onNodeAdd={addNode} />
         </div>
         <div className="org-chart">
-          <OrgChart data={orgData} setSelectedNode={setSelectedNode} selectedNode={selectedNode} handleDragData={handleDrag}/>
+          <OrgChart data={orgData} 
+          setSelectedNode={setSelectedNode} 
+          selectedNode={selectedNode} 
+          handleDrag={handleDrag}
+          getNodeData={getNodeData}/>
         </div>
       </div>
-      <Converter data={orgData} setOrgData={setOrgData} fetchOrgData={fetchOrgData} saveToSessionStorage={saveToSessionStorage} />
+      <Converter data={orgData} 
+      setOrgData={setOrgData} 
+      fetchOrgData={fetchOrgData} 
+      saveToSessionStorage={saveToSessionStorage} />
     </div>
   );
 
