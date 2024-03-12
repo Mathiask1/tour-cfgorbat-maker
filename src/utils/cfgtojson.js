@@ -1,83 +1,90 @@
+/**
+* Converts cfgOrbat into a JSON array.
+* 
+* @param {String} armaData - String containing cfgOrbat file.
+* 
+* @returns {JSON Data} - Returns a JSON Array based on the Arma Data.
+*/
 function armaConfigToJSON(armaData) {
-    let jsonData = [];
-    const lines = armaData.split('\n');
-    let classStack = []; // Stack to keep track of parent classes
-    let depth = 0; // Track the depth of the current class
-    let isClassBracket = false;
-    
-    for (let index = 0; index < lines.length; index++) {
-        let line = lines[index].trim();
+	let jsonData = [];
+	const lines = armaData.split('\n');
+	let classStack = []; // Stack to keep track of parent classes
+	let depth = 0; // Track the depth of the current class
+	let isClassBracket = false;
 
-        if (line.startsWith('//')) {
-            continue;
-        }
+	for (let index = 0; index < lines.length; index++) {
+		let line = lines[index].trim();
 
-        if (line.startsWith('class')) {
-            const className = line.split(' ')[1];
-            if (className.toLowerCase() === 'CfgORBAT'.toLowerCase()) {
-                continue; // Skip CfgOrbat class
-            }
-            const parentClass = classStack.length > 0 ? classStack[classStack.length - 1] : null;
-            const currentClass = resetCurrentAttributes(className); // Reset current attributes for each class
-            if (parentClass) {
-                parentClass.subordinates.push(currentClass);
-            } else {
-                jsonData.push(currentClass);
-            }
-            classStack.push(currentClass);
-            depth++;
-            isClassBracket = true;
-        } else if (line.includes('{')) {
-            // Do nothing for opening brace
-            if (line.includes("=")) {
-                isClassBracket = false;
-            }
-        } else if (line.includes('};')) {
-            if (depth > 0 && isClassBracket) {
-                classStack.pop();
-                depth--;
-            } else {
-                isClassBracket = true;
-            }
-        } else {
-            const attributeMatch = line.match(/^\s*([^=]+)\s*=\s*"?([^";]+)"?;/);
-            if (attributeMatch) {
-                const attributeName = attributeMatch[1].trim();
-                const attributeValue = attributeMatch[2];
-                const currentClass = classStack[classStack.length - 1];
-                if (attributeName in resetCurrentAttributes() && attributeName !== "subordinates") { // Check if the attribute is not "subordinates"
-                    currentClass[attributeName] = attributeValue; // Assign attribute to the current class
-                }
-            }
-        }
-        
-    }
+		if (line.startsWith('//')) {
+			continue;
+		}
 
-    jsonData = jsonData.filter(Boolean);
-    return JSON.stringify(jsonData, null, 2);
+		if (line.startsWith('class')) {
+			const className = line.split(' ')[1];
+			if (className.toLowerCase() === 'CfgORBAT'.toLowerCase()) {
+				continue; // Skip CfgOrbat class
+			}
+			const parentClass = classStack.length > 0 ? classStack[classStack.length - 1] : null;
+			const currentClass = resetCurrentAttributes(className); // Reset current attributes for each class
+			if (parentClass) {
+				parentClass.subordinates.push(currentClass);
+			} else {
+				jsonData.push(currentClass);
+			}
+			classStack.push(currentClass);
+			depth++;
+			isClassBracket = true;
+		} else if (line.includes('{')) {
+			// Do nothing for opening brace
+			if (line.includes("=")) {
+				isClassBracket = false;
+			}
+		} else if (line.includes('};')) {
+			if (depth > 0 && isClassBracket) {
+				classStack.pop();
+				depth--;
+			} else {
+				isClassBracket = true;
+			}
+		} else {
+			const attributeMatch = line.match(/^\s*([^=]+)\s*=\s*"?([^";]+)"?;/);
+			if (attributeMatch) {
+				const attributeName = attributeMatch[1].trim();
+				const attributeValue = attributeMatch[2];
+				const currentClass = classStack[classStack.length - 1];
+				if (attributeName in resetCurrentAttributes() && attributeName !== "subordinates") { // Check if the attribute is not "subordinates"
+					currentClass[attributeName] = attributeValue; // Assign attribute to the current class
+				}
+			}
+		}
+
+	}
+
+	jsonData = jsonData.filter(Boolean);
+	return JSON.stringify(jsonData, null, 2);
 }
 
 
 function resetCurrentAttributes(className) {
-    return {
-        cfgName: className,
-        id: "",
-        idType: "",
-        side: "",
-        size: "",
-        type: "",
-        commander: "",
-        commanderRank: "",
-        text: "",
-        textShort: "",
-        description: "",
-        subordinates: []
-    };
+	return {
+		cfgName: className,
+		id: "",
+		idType: "",
+		side: "",
+		size: "",
+		type: "",
+		commander: "",
+		commanderRank: "",
+		text: "",
+		textShort: "",
+		description: "",
+		subordinates: []
+	};
 }
 
 export function convertToJson(cfgText) {
-    const jsonData = armaConfigToJSON(cfgText);
-    return jsonData;
+	const jsonData = armaConfigToJSON(cfgText);
+	return jsonData;
 }
 /*
 // Example Arma 3 config string

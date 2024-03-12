@@ -42,27 +42,40 @@ const App = () => {
     return ids;
   };
 
+  /**
+   * Handles the drag operation of a node.
+   * 
+   * @param {Object} params - Object containing the draggedNode and droppedNode.
+   * @param {Object} params.draggedNode - The node being dragged.
+   * @param {Object} params.droppedNode - The node where the dragged node is dropped.
+   * 
+   * @returns {Promise<void>} - Returns a Promise that resolves after updating the organization data.
+   */
   const handleDrag = async ({ draggedNode, droppedNode }) => {
-    
-    const updatedData = await moveNode({draggedNode, droppedNode});
-
+    const updatedData = await moveNode({ draggedNode, droppedNode });
     setOrgData(updatedData);
     saveToSessionStorage(updatedData);
   };
 
   const moveNode = async ({ draggedNode, droppedNode }) => {
     let updatedData = await deleteNodeDataUtil(draggedNode.cfgName, orgData);
-    console.log("draggedNode", draggedNode, "droppedNode", droppedNode);
+
     if (!droppedNode) {
       updatedData = ([...updatedData, draggedNode]);
     } else {
-      updatedData = await addNodeToSelectedNode(droppedNode, draggedNode, data=updatedData);
+      updatedData = await addNodeToSelectedNode(droppedNode, draggedNode, data = updatedData);
     }
 
     return updatedData;
-
   };
 
+  /**
+   * Handles the update node operation
+   * 
+   * @param {Object} editedNodeData - The object containing the editedNodeData
+   * 
+   * @returns {Promise<void>} - Returns a Promise that resolves after updating the organization data.
+   */
   const updateNodeData = (editedNodeData) => {
     const updatedOrgData = updateNodeInData(orgData, editedNodeData, selectedNode);
     setOrgData(updatedOrgData);
@@ -84,6 +97,13 @@ const App = () => {
     });
   };
 
+  /**
+  * Handles the delete node operation
+  * 
+  * @param {String} cfgName - The string CfgName of the node to be deleted.
+  * 
+  * @returns {Promise<void>} - Returns a Promise that resolves after updating the organization data.
+  */
   const deleteNodeData = (cfgName) => {
     const updatedData = deleteNodeDataUtil(cfgName, orgData);
     if (selectedNode && selectedNode.cfgName === cfgName) {
@@ -103,6 +123,16 @@ const App = () => {
     }, []);
   };
 
+  /**
+* Handles the add node operation
+* If no nodes exists, it creates a new one at level 0.
+* If there's no selected node, it adds it to the end of the array.
+* If selectedNode exists it adds the node to the selected node.
+* 
+* @param {Object} newNodeData - Object containing node data
+* 
+* @returns {Promise<void>} - Returns a Promise that resolves after updating the organization data.
+*/
   const addNode = (newNodeData) => {
     const uniqueNodeIds = Array.from(new Set(orgData.flatMap((node) => extractAllNodeIds(node))));
     setAllNodeIds(uniqueNodeIds);
@@ -128,31 +158,9 @@ const App = () => {
     });
   };
 
-  const getNodeData = (cfgName, nodes = orgData) => {
-    let returnNode;
-    nodes.forEach(node => {
-      //console.log("node", node.cfgName, "cfg", cfgName);
-
-      if (returnNode) {
-        return; // If the node has already been found, exit the loop
-      }
-
-      if (cfgName === node.cfgName) {
-        returnNode = node;
-      } else if (node.subordinates && node.subordinates.length > 0) {
-        // If the node has subordinates, recursively search within them
-        returnNode = getNodeData(cfgName, node.subordinates);
-      }
-    });
-
-    return returnNode;
-  };
-
-
   const addNodeToSelectedNode = (selectedNode, newNodeData, data = orgData) => {
     return data.map(node => {
       if (node.cfgName === selectedNode.cfgName) {
-        console.log("Selected");
         const updatedNode = {
           ...node,
           subordinates: node.subordinates ? [...node.subordinates, newNodeData] : [newNodeData]
@@ -166,6 +174,22 @@ const App = () => {
       }
       return node;
     });
+  };
+
+  const getNodeData = (cfgName, nodes = orgData) => {
+    let returnNode;
+    nodes.forEach(node => {
+      if (returnNode) {
+        return;
+      }
+      if (cfgName === node.cfgName) {
+        returnNode = node;
+      } else if (node.subordinates && node.subordinates.length > 0) {
+        returnNode = getNodeData(cfgName, node.subordinates);
+      }
+    });
+
+    return returnNode;
   };
 
 
