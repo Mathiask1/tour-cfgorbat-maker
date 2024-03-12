@@ -18,7 +18,6 @@ const App = () => {
         const data = storedOrgData ? JSON.parse(storedOrgData) : await fetchOrgData();
         saveToSessionStorage(data);
         setOrgData(data);
-
       } catch (error) {
         console.error('Error fetching orgData:', error);
       }
@@ -30,7 +29,6 @@ const App = () => {
   const fetchOrgData = async () => {
     return data;
   };
-
 
   const extractAllNodeIds = (node) => {
     const ids = [node.cfgName];
