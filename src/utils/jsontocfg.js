@@ -1,7 +1,7 @@
 export function convertJsonToCfgORBAT(jsonData) {
     let cfgString = 'class CfgORBAT\n{\n';
 
-    function parseObjectToCfg(obj, indentLevel, parentCfgName = '') {
+    function parseObjectToCfg(obj, indentLevel) {
         const indent = '\t'.repeat(indentLevel);
         const cfgName = `${obj.id}_${obj.textShort.replace(/\s/g, '_').replace(/\./g, '')}`;
         

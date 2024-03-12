@@ -19,6 +19,7 @@ const Sidebar = ({ selectedNode, onNodeUpdate, onNodeDelete, onNodeAdd }) => {
     // Update form data when selectedNode changes
     useEffect(() => {
         if (selectedNode) {
+            console.log("selected", selectedNode);
             selectedNode.commanderRank = selectedNode.commanderRank.toLowerCase();
             setFormData(selectedNode);
         } else {
