@@ -195,6 +195,7 @@ const App = () => {
     sessionStorage.setItem('orgData', JSON.stringify(updatedOrgData));
   };
 
+
   return (
     <div className='app'>
       <div className="top-row">
@@ -205,7 +206,7 @@ const App = () => {
             onNodeDelete={deleteNodeData}
             onNodeAdd={addNode} />
         </div>
-        <div className="org-chart">
+        <div className="org-chart" >
           <OrgChart data={orgData}
             setSelectedNode={setSelectedNode}
             selectedNode={selectedNode}
@@ -213,7 +214,7 @@ const App = () => {
             getNodeData={getNodeData} />
         </div>
       </div>
-      <Converter data={orgData}
+      <Converter orgData={orgData}
         setOrgData={setOrgData}
         fetchOrgData={fetchOrgData}
         saveToSessionStorage={saveToSessionStorage} />

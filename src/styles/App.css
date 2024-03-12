@@ -64,10 +64,11 @@ section {
 }
 
 .node {
-  padding: 5px;
+  padding: 15px;
 }
 
 .nodeDiv {
+  padding-bottom: 5px;
   font-family: sans-serif;
   cursor: pointer;
   display: inline-block;

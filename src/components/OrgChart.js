@@ -5,13 +5,12 @@ import '../styles/App.css';
 
 const OrgChart = ({ data, setSelectedNode, selectedNode, handleDrag, getNodeData }) => {
     const [draggedNode, setDraggedNode] = useState(null);
-    const [droppedNode, setDroppedNode] = useState(null);
+
     const orgChartRef = useRef(null);
 
-    const handleDragUtil = () => {
+    const handleDragUtil = (droppedNode) => {
         if (!droppedNode) {
-            console.log("undefined droppedNode");
-            handleDrag({ draggedNode: draggedNode, droppedNode: droppedNode });
+            handleDrag({ draggedNode: draggedNode, droppedNode: null });
         } else {
             if (!(draggedNode.cfgName === droppedNode.cfgName)) {
                 handleDrag({ draggedNode: draggedNode, droppedNode: droppedNode });
@@ -21,7 +20,6 @@ const OrgChart = ({ data, setSelectedNode, selectedNode, handleDrag, getNodeData
 
     useEffect(() => {
         const handleClickInside = (event) => {
-            console.log(event.target.classList);
             if (!event.target.classList.contains('nodeDiv') && (event.target.classList.contains("org-chart") || event.target.classList.contains("nodeWrapper"))) {
                 setSelectedNode(null);
             }
@@ -34,8 +32,11 @@ const OrgChart = ({ data, setSelectedNode, selectedNode, handleDrag, getNodeData
         };
     }, [setSelectedNode]);
 
+
+
+
     return (
-        <div ref={orgChartRef}>
+        <div ref={orgChartRef} >
             <h2>Order of Battle</h2>
             {data.map((nodeData) => (
                 <Node key={nodeData.cfgName}
@@ -44,7 +45,6 @@ const OrgChart = ({ data, setSelectedNode, selectedNode, handleDrag, getNodeData
                     selectedNode={selectedNode}
                     handleDrag={handleDragUtil}
                     setDraggedNode={setDraggedNode}
-                    setDroppedNode={setDroppedNode}
                     getNodeData={getNodeData} />
             ))}
         </div>
