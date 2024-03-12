@@ -1,11 +1,8 @@
 /* Sidebar.css */
-
-
 .sidebar {
   padding: 10;
   background-color: rgba(173, 170, 163, 0.5);
   margin-bottom: 25px;
-
 }
 
 h2 {
@@ -15,13 +12,13 @@ h2 {
 .label-input {
   display: flex;
   align-items: center;
-  justify-content: space-between; /* Align items with space between them */
+  justify-content: space-between;
   margin-bottom: 10px;
   width: 100%;
 }
 
 label {
-  margin-right: 10px; /* Adjust spacing between label and input */
+  margin-right: 10px;
 }
 
 .input-sidebar {
@@ -35,8 +32,6 @@ select {
   min-width: 50%;
 }
 
-
-
 button {
   margin-top: 10px;
 }
@@ -44,5 +39,4 @@ button {
 .sidebar-Buttons {
   display: flex;
   justify-content: center;
-
 }
