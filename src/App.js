@@ -43,15 +43,11 @@ const App = () => {
   };
 
   const handleDrag = async ({ draggedNode, droppedNode }) => {
-    if (orgData) {
-      const updatedData = await moveNode({draggedNode, droppedNode});
+    
+    const updatedData = await moveNode({draggedNode, droppedNode});
 
-    } else {
-      console.log("undefinedddd");
-    };
-
-    /*     saveToSessionStorage(updatedData);
-    */    //console.log(updatedData);
+    setOrgData(updatedData);
+    saveToSessionStorage(updatedData);
   };
 
   const moveNode = async ({ draggedNode, droppedNode }) => {
@@ -63,8 +59,8 @@ const App = () => {
       updatedData = await addNodeToSelectedNode(droppedNode, draggedNode, data=updatedData);
     }
 
-    setOrgData(updatedData);
-    saveToSessionStorage(updatedData);
+    return updatedData;
+
   };
 
   const updateNodeData = (editedNodeData) => {
