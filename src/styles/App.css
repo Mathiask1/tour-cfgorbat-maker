@@ -84,14 +84,17 @@ section {
 }
 
 .node {
-  cursor: pointer;
+  padding: 5px; /* Add padding around the text content */
 }
 
 .nodeDiv {
   font-family: sans-serif;
-  margin-bottom: 5px;
   cursor: pointer;
+  display: inline-block; /* so height and width actually take affect */
+
 }
+
+
 
 /* Button */
 button {

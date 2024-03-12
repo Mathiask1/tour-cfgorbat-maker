@@ -42,23 +42,29 @@ const App = () => {
     return ids;
   };
 
-  const handleDrag = ({draggedNode, droppedNode}) => {
+  const handleDrag = async ({ draggedNode, droppedNode }) => {
     if (orgData) {
-      console.log("draggedNodeData", draggedNode);
-      let updatedData = deleteNodeData(draggedNode.cfgName);
-      
-      updatedData = addNodeToSelectedNode({selectedNode: droppedNode, newNodeData: draggedNode, orgData});
-      console.log("dropppppp",droppedNode);
-      console.log("test",updatedData);
-      setOrgData(updatedData);
-      saveToSessionStorage(updatedData);
+      const updatedData = await moveNode({draggedNode, droppedNode});
 
     } else {
       console.log("undefinedddd");
     };
-    
-/*     saveToSessionStorage(updatedData);
-*/    //console.log(updatedData);
+
+    /*     saveToSessionStorage(updatedData);
+    */    //console.log(updatedData);
+  };
+
+  const moveNode = async ({ draggedNode, droppedNode }) => {
+    let updatedData = await deleteNodeDataUtil(draggedNode.cfgName, orgData);
+    console.log("draggedNode", draggedNode, "droppedNode", droppedNode);
+    if (!droppedNode) {
+      updatedData = ([...updatedData, draggedNode]);
+    } else {
+      updatedData = await addNodeToSelectedNode(droppedNode, draggedNode, data=updatedData);
+    }
+
+    setOrgData(updatedData);
+    saveToSessionStorage(updatedData);
   };
 
   const updateNodeData = (editedNodeData) => {
@@ -130,11 +136,11 @@ const App = () => {
     let returnNode;
     nodes.forEach(node => {
       //console.log("node", node.cfgName, "cfg", cfgName);
-  
+
       if (returnNode) {
         return; // If the node has already been found, exit the loop
       }
-  
+
       if (cfgName === node.cfgName) {
         returnNode = node;
       } else if (node.subordinates && node.subordinates.length > 0) {
@@ -142,14 +148,15 @@ const App = () => {
         returnNode = getNodeData(cfgName, node.subordinates);
       }
     });
-  
+
     return returnNode;
   };
-  
 
-  const addNodeToSelectedNode = (selectedNode, newNodeData, data=orgData) => {
+
+  const addNodeToSelectedNode = (selectedNode, newNodeData, data = orgData) => {
     return data.map(node => {
       if (node.cfgName === selectedNode.cfgName) {
+        console.log("Selected");
         const updatedNode = {
           ...node,
           subordinates: node.subordinates ? [...node.subordinates, newNodeData] : [newNodeData]
@@ -181,17 +188,17 @@ const App = () => {
             onNodeAdd={addNode} />
         </div>
         <div className="org-chart">
-          <OrgChart data={orgData} 
-          setSelectedNode={setSelectedNode} 
-          selectedNode={selectedNode} 
-          handleDrag={handleDrag}
-          getNodeData={getNodeData}/>
+          <OrgChart data={orgData}
+            setSelectedNode={setSelectedNode}
+            selectedNode={selectedNode}
+            handleDrag={handleDrag}
+            getNodeData={getNodeData} />
         </div>
       </div>
-      <Converter data={orgData} 
-      setOrgData={setOrgData} 
-      fetchOrgData={fetchOrgData} 
-      saveToSessionStorage={saveToSessionStorage} />
+      <Converter data={orgData}
+        setOrgData={setOrgData}
+        fetchOrgData={fetchOrgData}
+        saveToSessionStorage={saveToSessionStorage} />
     </div>
   );
 

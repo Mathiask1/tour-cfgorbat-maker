@@ -6,14 +6,17 @@ const Node = ({ data, onClick, selectedNode, handleDrag, setDraggedNode, setDrop
 
   const handleClick = (e) => {
     e.stopPropagation(); // Stop event propagation to prevent clicking on a subordinate from also triggering its parent's click
-    if (e.target.classList.contains("nodeWrapper")) { } else {
+    if (e.target.classList.contains("nodeDiv")) {
+      // Only trigger onClick if the click target is the nodeDiv
       onClick(data); // Pass the clicked node data to the parent component
     }
   };
+  
 
   const handleDragStart = (e) => {
     setDraggedNode(data);
   };
+
   const onDragEnter = (e) => {
     e.preventDefault();
     e.stopPropagation();

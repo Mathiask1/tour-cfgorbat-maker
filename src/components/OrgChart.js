@@ -12,12 +12,14 @@ const OrgChart = ({ data, setSelectedNode, selectedNode, handleDrag, getNodeData
     const handleDragUtil = () => {
         //console.log("dragged", draggedNode,"dropped", droppedNode);
         //setSelectedNode(droppedNode);
-        handleDrag({ draggedNode: draggedNode, droppedNode: droppedNode });
+        if (!(draggedNode.cfgName === droppedNode.cfgName)) {
+            handleDrag({ draggedNode: draggedNode, droppedNode: droppedNode });
+        };
     };
 
     useEffect(() => {
         const handleClickInside = (event) => {
-            //console.log(event.target.classList);
+            console.log(event.target);
             if (!event.target.classList.contains('nodeDiv') && (event.target.classList.contains("org-chart") || event.target.classList.contains("nodeWrapper"))) {
                 // Click is not on a node, deselect the selected node
                 setSelectedNode(null); // Deselect the selected node
