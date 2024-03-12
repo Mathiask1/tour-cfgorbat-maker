@@ -20,12 +20,11 @@ const Converter = ({ data, setOrgData, fetchOrgData, saveToSessionStorage }) => 
 
     const handleConvert = (e) => {
         e.preventDefault();
-        // Call the conversion utility function based on the selected converter type
         if (converterType === "JsonToCfg") {
             const text = convertJsonToCfgORBAT(data);
             setConvertedText(text);
         } else if (converterType === "CfgToJson") {
-            const text = convertToJson(convertedText); // Pass the JSON data
+            const text = convertToJson(convertedText);
             setOrgData(JSON.parse(text));
         }
     };
@@ -44,18 +43,11 @@ const Converter = ({ data, setOrgData, fetchOrgData, saveToSessionStorage }) => 
             const { target } = event;
             const start = target.selectionStart;
             const end = target.selectionEnd;
-    
-            // Get the current value and calculate the new value with the tab character inserted
             const text = target.value;
             const newValue = text.substring(0, start) + '\t' + text.substring(end);
-    
-            // Save the cursor position before updating the value
             const newPosition = start + 1;
     
-            // Update the value
             setConvertedText(newValue);
-    
-            // Set the cursor position after the value is updated
             setTimeout(() => {
                 textAreaRef.current.focus();
                 textAreaRef.current.setSelectionRange(newPosition, newPosition);

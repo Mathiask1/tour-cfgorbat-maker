@@ -1,3 +1,11 @@
+/**
+* Converts JSON data into a cfgOrbat file.
+* 
+* @param {JSON Data} jsonData - JSON Array.
+* 
+* @returns {CfgOrbat String} - Returns a CfgOrbat string based on the JSON Data.
+*/
+
 export function convertJsonToCfgORBAT(jsonData) {
     let cfgString = 'class CfgORBAT\n{\n';
 

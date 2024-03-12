@@ -16,10 +16,8 @@ const Sidebar = ({ selectedNode, onNodeUpdate, onNodeDelete, onNodeAdd }) => {
         description: ''
     });
 
-    // Update form data when selectedNode changes
     useEffect(() => {
         if (selectedNode) {
-            console.log("selected", selectedNode);
             selectedNode.commanderRank = selectedNode.commanderRank.toLowerCase();
             setFormData(selectedNode);
         } else {
@@ -47,38 +45,27 @@ const Sidebar = ({ selectedNode, onNodeUpdate, onNodeDelete, onNodeAdd }) => {
         const { name, value } = e.target;
         let parsedValue = value;
     
-        // Convert value to lowercase if necessary
         if (name.toLowerCase() === 'commanderrank') {
             parsedValue = value.toLowerCase();
         } else if (name.toLowerCase() === 'id' || name.toLowerCase() === 'idtype') {
-            parsedValue = parseInt(value); // Parse value to an integer for 'id' field
+            parsedValue = parseInt(value); 
         }
     
-        // Update formData with the new value
         const updatedFormData = { ...formData, [name]: parsedValue };
     
-        // Generate cfgName for the updated node if textShort is modified
         if (name === 'textShort') {
             const cfgName = generateCfgName(updatedFormData.id, value);
             updatedFormData.cfgName = cfgName;
         }
     
-        // Update formData with the generated cfgName
         setFormData(updatedFormData);
-    
-        // Update cfgName for subordinate units recursively
         updateCfgNameRecursively(updatedFormData);
     };
-    
-    
 
-    // Function to update cfgName recursively
     const updateCfgNameRecursively = (node) => {
-        // Generate cfgName for the current node
         const cfgName = generateCfgName(node.id, node.textShort);
         node.cfgName = cfgName;
 
-        // Update cfgName for subordinate units recursively
         if (node.subordinates && node.subordinates.length > 0) {
             node.subordinates.forEach((subordinate) => {
                 updateCfgNameRecursively(subordinate);
@@ -92,9 +79,9 @@ const Sidebar = ({ selectedNode, onNodeUpdate, onNodeDelete, onNodeAdd }) => {
         if (action === 'updateButton') {
             onNodeUpdate(formData);
         } else if (action === 'deleteButton') {
-            onNodeDelete(formData.cfgName); // Pass only the ID to delete
+            onNodeDelete(formData.cfgName);
         } else if (action === 'addButton') {
-            onNodeAdd(formData); // Pass formData to add a new node
+            onNodeAdd(formData); 
         } else {
             // Handle other actions
         }
@@ -220,8 +207,6 @@ const Sidebar = ({ selectedNode, onNodeUpdate, onNodeDelete, onNodeAdd }) => {
                     <button name="updateButton" onClick={handleUpdate}>Update</button>
                     <button name="deleteButton" onClick={handleUpdate}>Delete</button>
                 </div>
-
-                {/* The button below triggers the save action */}
             </form>
 
         </div>
