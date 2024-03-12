@@ -1,11 +1,12 @@
 import React, { useState, useRef  } from 'react';
 import '../styles/App.css';
+import data from '../Data.json';
 
 // Import the conversion utility functions
 import { convertJsonToCfgORBAT } from '../utils/jsontocfg.js'; // Update the path as per your file structure
 import { convertToJson } from '../utils/cfgtojson.js';
 
-const Converter = ({ data, setOrgData, fetchOrgData, saveToSessionStorage }) => {
+const Converter = ({ orgData, setOrgData, fetchOrgData, saveToSessionStorage }) => {
     const [convertedText, setConvertedText] = useState('');
     const [converterType, setConverterType] = useState("JsonToCfg");
     const textAreaRef = useRef(null); // Define textAreaRef using useRef
@@ -21,7 +22,7 @@ const Converter = ({ data, setOrgData, fetchOrgData, saveToSessionStorage }) => 
     const handleConvert = (e) => {
         e.preventDefault();
         if (converterType === "JsonToCfg") {
-            const text = convertJsonToCfgORBAT(data);
+            const text = convertJsonToCfgORBAT(orgData);
             setConvertedText(text);
         } else if (converterType === "CfgToJson") {
             const text = convertToJson(convertedText);
@@ -30,10 +31,8 @@ const Converter = ({ data, setOrgData, fetchOrgData, saveToSessionStorage }) => 
     };
 
     const importDefault = async (e) => {
-        e.preventDefault();
-        const data = await fetchOrgData();
-        saveToSessionStorage(data);
         setOrgData(data);
+        saveToSessionStorage(data);
     };
 
     const handleTab = (event) => {

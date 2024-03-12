@@ -1,11 +1,9 @@
-//node.js
 import React from 'react';
 import '../styles/App.css';
 
-const Node = ({ data, onClick, selectedNode, handleDrag, setDraggedNode, setDroppedNode, getNodeData }) => {
-
+const Node = ({ data, onClick, selectedNode, handleDrag, setDroppedNode, setDraggedNode,  getNodeData }) => {
   const handleClick = (e) => {
-    e.stopPropagation(); 
+    e.stopPropagation();
     if (e.target.classList.contains("nodeDiv")) {
       onClick(data);
     }
@@ -15,24 +13,20 @@ const Node = ({ data, onClick, selectedNode, handleDrag, setDraggedNode, setDrop
     setDraggedNode(data);
   };
 
-  const onDragEnter = (e) => {
+  const onDragOver = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    setDroppedNode(getNodeData(data.cfgName));
   };
 
-  const onDragLeave = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    if (!e.currentTarget.contains(e.relatedTarget)) {
-      setDroppedNode(null);
+  const onDragEnd = (e) => {
+    if (!e.dataTransfer.dropEffect || e.dataTransfer.dropEffect === 'none') {
+      handleDrag();
     }
-  };
+  }
 
-  const handleDrop = (e) => {
+  const onDrop = (e) => {
     e.preventDefault();
-    e.stopPropagation();
-    handleDrag();
+    handleDrag(getNodeData(e.target.id));
   };
 
   return (
@@ -44,9 +38,9 @@ const Node = ({ data, onClick, selectedNode, handleDrag, setDraggedNode, setDrop
             id={data.cfgName}
             draggable
             onDragStart={handleDragStart}
-            onDragEnter={onDragEnter}
-            onDragEnd={handleDrop}
-            onDragLeave={onDragLeave}
+            onDragOver={onDragOver}
+            onDrop={onDrop}
+            onDragEnd={onDragEnd}
             onClick={handleClick}>
             {data.cfgName + ': ' + data.text}
           </div>
@@ -58,7 +52,6 @@ const Node = ({ data, onClick, selectedNode, handleDrag, setDraggedNode, setDrop
                   selectedNode={selectedNode}
                   handleDrag={handleDrag}
                   setDraggedNode={setDraggedNode}
-                  setDroppedNode={setDroppedNode}
                   getNodeData={getNodeData} />
               ))}
             </div>
