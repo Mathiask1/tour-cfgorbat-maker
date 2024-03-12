@@ -1,16 +1,16 @@
 {
   "files": {
-    "main.css": "/tour-cfgorbat-maker/static/css/main.7f057e3b.css",
-    "main.js": "/tour-cfgorbat-maker/static/js/main.a8117bc8.js",
+    "main.css": "/tour-cfgorbat-maker/static/css/main.d675ef0f.css",
+    "main.js": "/tour-cfgorbat-maker/static/js/main.959911c0.js",
     "static/js/592.cad1284d.chunk.js": "/tour-cfgorbat-maker/static/js/592.cad1284d.chunk.js",
     "static/media/tour_bg.jpg": "/tour-cfgorbat-maker/static/media/tour_bg.5f4bf655371305687110.jpg",
     "index.html": "/tour-cfgorbat-maker/index.html",
-    "main.7f057e3b.css.map": "/tour-cfgorbat-maker/static/css/main.7f057e3b.css.map",
-    "main.a8117bc8.js.map": "/tour-cfgorbat-maker/static/js/main.a8117bc8.js.map",
+    "main.d675ef0f.css.map": "/tour-cfgorbat-maker/static/css/main.d675ef0f.css.map",
+    "main.959911c0.js.map": "/tour-cfgorbat-maker/static/js/main.959911c0.js.map",
     "592.cad1284d.chunk.js.map": "/tour-cfgorbat-maker/static/js/592.cad1284d.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.7f057e3b.css",
-    "static/js/main.a8117bc8.js"
+    "static/css/main.d675ef0f.css",
+    "static/js/main.959911c0.js"
   ]
 }
