@@ -87,6 +87,15 @@ section {
   min-height: 500px;
   width: 100%;
   resize: none;
+  background-color: rgb(160, 160, 160);
+  border-top: none;
+  border-bottom: none;
+  border-left: none;
+  border-right: none; 
+  padding: 10px;
+}
+.converter-text:focus {
+  outline: none;
 }
 
 /* Converter */

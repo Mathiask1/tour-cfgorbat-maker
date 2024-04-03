@@ -61,7 +61,7 @@ const App = () => {
     if (!droppedNode) {
       updatedData = ([...updatedData, draggedNode]);
     } else {
-      updatedData = await addNodeToSelectedNode(droppedNode, draggedNode, data = updatedData);
+      updatedData = await addNodeToSelectedNode(droppedNode, draggedNode, updatedData);
     }
 
     return updatedData;
