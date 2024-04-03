@@ -1,86 +1,128 @@
+/**
+* Converts cfgOrbat into a JSON array.
+* 
+* @param {String} armaData - String containing cfgOrbat file.
+* 
+* @returns {JSON Data} - Returns a JSON Array based on the Arma Data.
+*/
 function armaConfigToJSON(armaData) {
-    let jsonData = [];
-    const lines = armaData.split('\n');
-    let classStack = []; // Stack to keep track of parent classes
-    let depth = 0; // Track the depth of the current class
-    let isClassBracket = false;
-    
-    for (let index = 0; index < lines.length; index++) {
-        let line = lines[index].trim();
+	let jsonData = [];
+	const lines = armaData.split('\n');
+	let classStack = []; // Stack to keep track of parent classes
+	let depth = 0; // Track the depth of the current class
+	let isClassBracket = false;
+	let currentAttributeName = null;
+	let currentAttributeValue = null;
 
-        if (line.startsWith('//')) {
-            continue;
-        }
-        console.log(line);
+	for (let index = 0; index < lines.length; index++) {
+		let line = lines[index].trim();
 
-        if (line.startsWith('class')) {
-            const className = line.split(' ')[1];
-            if (className.toLowerCase() === 'CfgORBAT'.toLowerCase()) {
-                continue; // Skip CfgOrbat class
-            }
-            const parentClass = classStack.length > 0 ? classStack[classStack.length - 1] : null;
-            const currentClass = resetCurrentAttributes(className); // Reset current attributes for each class
-            if (parentClass) {
-                parentClass.subordinates.push(currentClass);
-            } else {
-                jsonData.push(currentClass);
-            }
-            classStack.push(currentClass);
-            depth++;
-            isClassBracket = true;
-        } else if (line.includes('{')) {
-            // Do nothing for opening brace
-            if (line.includes("=")) {
-                isClassBracket = false;
-            }
-        } else if (line.includes('};')) {
-            if (depth > 0 && isClassBracket) {
-                let pop = classStack.pop();
-                depth--;
-            } else {
-                isClassBracket = true;
-            }
-        } else {
-            const attributeMatch = line.match(/^\s*([^=]+)\s*=\s*"?([^";]+)"?;/);
-            if (attributeMatch) {
-                const attributeName = attributeMatch[1].trim();
+		if (line.startsWith('//')) {
+			continue;
+		}
+
+		if (line.startsWith('class')) {
+			const className = line.split(' ')[1];
+			if (className.toLowerCase() === 'CfgORBAT'.toLowerCase()) {
+				continue; // Skip CfgOrbat class
+			}
+			const parentClass = classStack.length > 0 ? classStack[classStack.length - 1] : null;
+			const currentClass = resetCurrentAttributes(className); // Reset current attributes for each class
+			if (parentClass) {
+				parentClass.subordinates.push(currentClass);
+			} else {
+				jsonData.push(currentClass);
+			}
+			classStack.push(currentClass);
+			depth++;
+			isClassBracket = true;
+		} 
+		if (line.includes('{')) {
+			// Do nothing for opening brace
+			if (line.includes("=")) {
+				isClassBracket = false;
+			}
+		} 
+		if (line.includes("=")) {
+			const attributeMatch = line.match(/^\s*([^=]+)\s*=\s*"?([^";]+)"?;/);
+
+			if (attributeMatch) {
+				const attributeName = attributeMatch[1].trim();
+				currentAttributeName = attributeName;
+				currentAttributeValue = line;
+			}
+		} 
+
+		if (line.includes('}')) {
+			if (depth > 0 && isClassBracket) {
+				classStack.pop();
+				depth--;
+			} else {
+				isClassBracket = true;
+			}
+		}
+		if (line.includes(';')) {
+
+			if (currentAttributeValue) {
+				currentAttributeValue = currentAttributeValue.replace(/\s+/g, ' ').trim();
+				const attributeMatch = currentAttributeValue.match(/^\s*([^=]+)\s*=\s*"?([^";]+)"?;/);
+				const attributeName = attributeMatch[1].trim();
                 const attributeValue = attributeMatch[2];
-                const currentClass = classStack[classStack.length - 1];
-                if (attributeName in resetCurrentAttributes() && attributeName != "subordinates") { // Check if the attribute is not "subordinates"
-                    currentClass[attributeName] = attributeValue; // Assign attribute to the current class
-                }
-            }
-        }
-        
-    }
+				console.log(attributeValue);
 
-    return jsonData;
+				const currentClass = classStack[classStack.length - 1];
+				if (attributeMatch && attributeName !== "tags") {
+					currentClass[attributeName] = attributeValue; // Assign attribute to the current class
+				} else {
+					currentClass[attributeName] = [attributeValue]; // Assign attribute to the current class
+				};
+				currentAttributeName = null;
+				currentAttributeValue = null;
+			}
+
+		};
+
+		if (currentAttributeName) {
+			currentAttributeValue += line;
+		}
+
+	}
+
+	return JSON.stringify(jsonData, null, 2);
 }
 
 
 function resetCurrentAttributes(className) {
-    return {
-        cfgName: className,
-        id: "",
-        idType: "",
-        side: "",
-        size: "",
-        type: "",
-        commander: "",
-        commanderRank: "",
-        text: "",
-        textShort: "",
-        description: "",
-        subordinates: []
-    };
+	return {
+		cfgName: className,
+		id: "",
+		idType: "",
+		side: "",
+		size: "",
+		type: "",
+		commander: "",
+		commanderRank: "",
+		text: "",
+		textShort: "",
+		description: "",
+		insignia: "",
+		color: "",
+		colorInsignia: [],
+		tags: [],
+		subordinates: []
+	};
+}
+
+function convertToJson(cfgText) {
+	const jsonData = armaConfigToJSON(cfgText);
+	return jsonData;
 }
 
 // Example Arma 3 config string
 const armaConfigString = `
 class CfgORBAT
 {
-	class 1_1st_Inf._Reg.
-	{
+	class 1_1st_Inf._Reg. {
 		id = 1;
 		idType = "UUID";
 		side = "West";
@@ -91,6 +133,8 @@ class CfgORBAT
 		text = "1st Regiment Infantry Unit";
 		textShort = "1st Inf. Reg.";
 		description = "This infantry unit is known for its discipline and effectiveness on the battlefield.";
+		color = "test";
+		tags = {"BIS", "USArmy", "CA"};
 	};
 	class 2_2nd_Inf._Btn.
 	{
@@ -105,8 +149,7 @@ class CfgORBAT
 		textShort = "2nd Inf. Btn.";
 		description = "This infantry unit is led by Captain Johnson.";
 	};
-	class 3_3rd_Div._HW
-	{
+	class 3_3rd_Div._HW {
 		id = 3;
 		idType = "UUID";
 		side = "West";
@@ -117,7 +160,6 @@ class CfgORBAT
 		text = "3rd Division Heavy Weapons Unit";
 		textShort = "3rd Div. HW";
 		description = "This unit specializes in operating heavy weapons and artillery.";
-        test = {        };
 		class 4_4th_Pl._Spec._HW
 		{
 			id = 4;
@@ -165,4 +207,4 @@ class CfgORBAT
 const jsonData = armaConfigToJSON(armaConfigString);
 
 // Print JSON
-console.log(JSON.stringify(jsonData, null, 2));
+console.log(jsonData);
