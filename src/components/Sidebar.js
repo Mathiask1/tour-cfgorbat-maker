@@ -49,6 +49,7 @@ const Sidebar = ({ selectedNode, onNodeUpdate, onNodeDelete, onNodeAdd }) => {
             parsedValue = value.toLowerCase();
         } else if (name.toLowerCase() === 'id' || name.toLowerCase() === 'idtype') {
             parsedValue = parseInt(value); 
+            console.log(parsedValue);
         }
     
         const updatedFormData = { ...formData, [name]: parsedValue };

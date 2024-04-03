@@ -1,7 +1,7 @@
 [{
     "cfgName": "1_1st_Inf_Reg12d",
     "id": 1,
-    "idType": "UUID",
+    "idType": 0,
     "side": "West",
     "size": "Regiment",
     "type": "Infantry",
@@ -14,7 +14,7 @@
 }, {
     "cfgName": "2_2nd_Inf_Btn",
     "id": 2,
-    "idType": "UUID",
+    "idType": 0,
     "side": "West",
     "size": "Regiment",
     "type": "Infantry",
@@ -27,7 +27,7 @@
 }, {
     "cfgName": "3_3rd_Div_HWs",
     "id": 3,
-    "idType": "UUID",
+    "idType": 0,
     "side": "West",
     "size": "Regiment",
     "type": "Heavy Weapons",
@@ -39,7 +39,7 @@
     "subordinates": [{
             "cfgName": "4_4th_Pl_Spec_HWd",
             "id": 4,
-            "idType": "UUID",
+            "idType": 0,
             "side": "West",
             "size": "Battalion",
             "type": "Heavy Weapons",
@@ -51,7 +51,7 @@
             "subordinates": [{
                     "cfgName": "5_5th_Pl_Spec_HWs",
                     "id": 5,
-                    "idType": "UUID",
+                    "idType": 0,
                     "side": "West",
                     "size": "Battalion",
                     "type": "Heavy Weapons",
@@ -64,7 +64,7 @@
                 }, {
                     "cfgName": "6_6th_Pl_Spec_HWsd",
                     "id": 6,
-                    "idType": "UUID",
+                    "idType": 0,
                     "side": "West",
                     "size": "Battalion",
                     "type": "Infantry",

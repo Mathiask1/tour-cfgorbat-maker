@@ -82,28 +82,7 @@ section {
   height: 100%;
 }
 
-/* Converter text */
-.converter-text {
-  min-height: 500px;
-  width: 100%;
-  resize: none;
-  background-color: rgb(160, 160, 160);
-  border-top: none;
-  border-bottom: none;
-  border-left: none;
-  border-right: none; 
-  padding: 10px;
-}
-.converter-text:focus {
-  outline: none;
-}
 
-/* Converter */
-.converter {
-  width: 90%;
-  margin: 0 auto;
-  padding-bottom: 25px;
-}
 
 /* Button */
 button {
@@ -126,4 +105,10 @@ button {
 button:hover {
   color: rgb(255, 255, 255);
   background-color: rgb(60, 145, 255);
+}
+
+.buttons-container {
+  display: flex;
+  justify-content: left; /* Center the buttons horizontally */
+  margin-top: 10px; /* Adjust as needed */
 }
