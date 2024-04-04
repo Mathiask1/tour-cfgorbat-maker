@@ -13,6 +13,7 @@ function armaConfigToJSON(armaData) {
 	let isClassBracket = false;
 	let currentAttributeName = null;
 	let currentAttributeValue = null;
+	let isAttribute = false;
 
 	for (let index = 0; index < lines.length; index++) {
 		let line = lines[index].trim();
@@ -42,16 +43,19 @@ function armaConfigToJSON(armaData) {
 			if (line.includes("=")) {
 				isClassBracket = false;
 			}
-		} 
+		}
 		if (line.includes("=")) {
-			const attributeMatch = line.match(/^\s*([^=]+)\s*=\s*"?([^";]+)"?;/);
-
-			if (attributeMatch) {
-				const attributeName = attributeMatch[1].trim();
-				currentAttributeName = attributeName;
+			//const attributeMatch = line.match(/^\s*([^=]+)\s*=\s*"?([^";]+)"?;/);
+			currentAttributeName = line.split("=")[0];
+			if (currentAttributeName) {
 				currentAttributeValue = line;
+				isAttribute = true;
+				//console.log(currentAttributeName);
 			}
-		} 
+		} else if (isAttribute) {
+			currentAttributeValue += line;
+		}
+		
 
 		if (line.includes('}')) {
 			if (depth > 0 && isClassBracket) {
@@ -62,29 +66,31 @@ function armaConfigToJSON(armaData) {
 			}
 		}
 		if (line.includes(';')) {
-
+			isAttribute = false;
 			if (currentAttributeValue) {
-				currentAttributeValue = currentAttributeValue.replace(/\s+/g, ' ').trim();
-				const attributeMatch = currentAttributeValue.match(/^\s*([^=]+)\s*=\s*"?([^";]+)"?;/);
-				const attributeName = attributeMatch[1].trim();
-                const attributeValue = attributeMatch[2];
-				console.log(attributeValue);
+				//currentAttributeValue = currentAttributeValue.replace(/\s+/g, ' ').trim();
+				let matches = currentAttributeValue.match(/([^=]+)\s*=\s*("[^"]+"|\{[^}]+\}|\S+);/g);
 
-				const currentClass = classStack[classStack.length - 1];
-				if (attributeMatch && attributeName !== "tags") {
-					currentClass[attributeName] = attributeValue; // Assign attribute to the current class
-				} else {
-					currentClass[attributeName] = [attributeValue]; // Assign attribute to the current class
-				};
-				currentAttributeName = null;
-				currentAttributeValue = null;
+				if (matches) {
+				  let parts = matches.map(match => match.split("=").map(part => part.trim()))[0];
+				  currentAttributeName = parts[0];
+				  currentAttributeValue = parts[1];
+				  currentAttributeValue = currentAttributeValue.replace(/\\/g, "").replace(/"/g, "").replace(";","");
+				}
+				
+                // For "tags" attribute, remove curly braces and split by comma
+                if (currentAttributeName === "tags") {
+                    currentAttributeValue = currentAttributeValue.replace(/[{}]/g, "").split(',').map(tag => tag.trim());
+                }
+
+                const currentClass = classStack[classStack.length - 1];
+                currentClass[currentAttributeName] = currentAttributeValue;
+                currentAttributeName = null;
+                currentAttributeValue = null;
 			}
 
-		};
-
-		if (currentAttributeName) {
-			currentAttributeValue += line;
 		}
+
 
 	}
 
@@ -134,7 +140,11 @@ class CfgORBAT
 		textShort = "1st Inf. Reg.";
 		description = "This infantry unit is known for its discipline and effectiveness on the battlefield.";
 		color = "test";
-		tags = {"BIS", "USArmy", "CA"};
+		tags = {"BIS", 
+			"USArmy", 
+			
+			"CA"
+		};
 	};
 	class 2_2nd_Inf._Btn.
 	{
