@@ -5,6 +5,8 @@ import OrgChart from '../components/OrgChart';
 import Sidebar from '../components/Sidebar';
 import '../styles/App.css';
 import Converter from '../components/Converter';
+import NavigationBar from '../components/NavigationBar';
+
 
 const Home = () => {
   const [orgData, setOrgData] = useState([]);
@@ -198,6 +200,8 @@ const Home = () => {
 
   return (
     <div className='app'>
+      <NavigationBar />
+
       <div className="top-row">
         <div className="sidebar">
           <Sidebar selectedNode={selectedNode}
