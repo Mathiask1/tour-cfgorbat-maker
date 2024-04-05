@@ -12,17 +12,32 @@ export function convertJsonToCfgORBAT(jsonData) {
     function parseObjectToCfg(obj, indentLevel) {
         const indent = '\t'.repeat(indentLevel);
         const cfgName = `${obj.id}_${obj.textShort.replace(/\s/g, '_').replace(/\./g, '')}`;
-        
         cfgString += `${indent}class ${cfgName}\n`;
         cfgString += `${indent}{\n`;
 
         Object.keys(obj).forEach(key => {
             if (key !== 'subordinates' && key !== 'cfgName') {
+                switch (key.toLowerCase()) {
+                    case "id":
+                        cfgString += `${indent}\t${key} = ${parseInt(obj[key])};\n`;
+                        break;
+                    case "idtype":
+                        cfgString += `${indent}\t${key} = ${parseInt(obj[key])};\n`;
+                        break;
+                    case "colorinsignia":
+                        cfgString += `${indent}\t${key} = {${obj[key]}};\n`;
+                        break;
+                    case "tags":
+                        break;
+                    default:
+                        cfgString += `${indent}\t${key} = ${JSON.stringify(obj[key])};\n`;
+                }
+                /*
                 if (key.toLowerCase() === "id" || key.toLowerCase() === "idtype") {
                     cfgString += `${indent}\t${key} = ${parseInt(obj[key])};\n`;
                 } else {
                     cfgString += `${indent}\t${key} = ${JSON.stringify(obj[key])};\n`;
-                }                
+                }*/
             }
         });
 
@@ -40,7 +55,7 @@ export function convertJsonToCfgORBAT(jsonData) {
     jsonData.forEach(obj => {
         parseObjectToCfg(obj, 1);
     });
-    
+
     cfgString += '};';
 
     return cfgString;

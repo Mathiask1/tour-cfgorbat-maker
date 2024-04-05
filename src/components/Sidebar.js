@@ -2,39 +2,42 @@ import '../styles/sidebar.css';
 import React, { useState, useEffect } from 'react';
 
 const Sidebar = ({ selectedNode, onNodeUpdate, onNodeDelete, onNodeAdd }) => {
-    const [formData, setFormData] = useState({
-        cfgName: '',
-        id: '',
-        idType: '',
-        side: '',
-        size: '',
-        type: '',
-        commander: '',
-        commanderRank: '',
-        text: '',
-        textShort: '',
-        description: ''
-    });
+    const defaultAttributes = () => {
+        return {
+            cfgName: '',
+            id: "",
+            idType: "",
+            side: "",
+            size: "",
+            type: "",
+            commander: "",
+            commanderRank: "",
+            text: "",
+            textShort: "",
+            description: "",
+            insignia: "",
+            color: "",
+            colorInsignia: [],
+            tags: [],
+            subordinates: []
+        };
+    }
+    const [formData, setFormData] = useState({defaultAttributes});
 
     useEffect(() => {
         if (selectedNode) {
-            selectedNode.commanderRank = selectedNode.commanderRank.toLowerCase();
+            for (let key in defaultAttributes()) {
+                if (!selectedNode[key]) {
+                    selectedNode[key] = defaultAttributes()[key];
+                }
+            }
             setFormData(selectedNode);
         } else {
-            setFormData({        
-                cfgName: '',
-                id: '',
-                idType: '',
-                side: '',
-                size: '',
-                type: '',
-                commander: '',
-                commanderRank: '',
-                text: '',
-                textShort: '',
-                description: ''})
+            setFormData({defaultAttributes})
         }
     }, [selectedNode]);
+
+
 
     const generateCfgName = (id, textShort) => {
         let str = `${id}_${textShort.replace(/\s+/g, '_')}`;
@@ -47,8 +50,12 @@ const Sidebar = ({ selectedNode, onNodeUpdate, onNodeDelete, onNodeAdd }) => {
     
         if (name.toLowerCase() === 'commanderrank') {
             parsedValue = value.toLowerCase();
+        } else if (name.toLowerCase() === 'colorinsignia') {
+            parsedValue = value.trim().split(/[,\s]+/) // Trim input value before splitting
+                .map(str => parseInt(str.trim(), 10))
+                .filter(num => !isNaN(num));
         } else if (name.toLowerCase() === 'id' || name.toLowerCase() === 'idtype') {
-            parsedValue = parseInt(value); 
+            parsedValue = parseInt(value);
             console.log(parsedValue);
         }
     
@@ -62,6 +69,7 @@ const Sidebar = ({ selectedNode, onNodeUpdate, onNodeDelete, onNodeAdd }) => {
         setFormData(updatedFormData);
         updateCfgNameRecursively(updatedFormData);
     };
+    
 
     const updateCfgNameRecursively = (node) => {
         const cfgName = generateCfgName(node.id, node.textShort);
@@ -82,7 +90,7 @@ const Sidebar = ({ selectedNode, onNodeUpdate, onNodeDelete, onNodeAdd }) => {
         } else if (action === 'deleteButton') {
             onNodeDelete(formData.cfgName);
         } else if (action === 'addButton') {
-            onNodeAdd(formData); 
+            onNodeAdd(formData);
         } else {
             // Handle other actions
         }
@@ -201,6 +209,22 @@ const Sidebar = ({ selectedNode, onNodeUpdate, onNodeDelete, onNodeAdd }) => {
                 <div className="label-input">
                     <label htmlFor="description">Description:</label>
                     <input className="input-sidebar" type="text" id="description" name="description" value={formData.description} onChange={handleChange} />
+                </div>
+                <div className="label-input">
+                    <label htmlFor="insignia">Insignia:</label>
+                    <input className="input-sidebar" type="text" id="insignia" name="insignia" value={formData.insignia} onChange={handleChange} />
+                </div>
+                <div className="label-input">
+                    <label htmlFor="color">Color:</label>
+                    <input className="input-sidebar" type="text" id="color" name="color" value={formData.color} onChange={handleChange} />
+                </div>
+                <div className="label-input">
+                    <label htmlFor="colorInsignia">Color Insignia:</label>
+                    <input className="input-sidebar" type="text" id="colorInsignia" name="colorInsignia" value={formData.colorInsignia} onChange={handleChange} />
+                </div>
+                <div className="label-input">
+                    <label htmlFor="tags">Tags:</label>
+                    <input className="input-sidebar" type="text" id="tags" name="tags" value={formData.tags} onChange={handleChange} />
                 </div>
 
                 <div className='sidebar-Buttons'>
