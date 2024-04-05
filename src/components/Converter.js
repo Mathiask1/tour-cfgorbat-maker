@@ -76,13 +76,14 @@ const Converter = ({ orgData, setOrgData, fetchOrgData, saveToSessionStorage }) 
                 </label>
             </div>
             <div className="line-number-text-area-container">
-                <div class="numbers">
+                <div className="numbers">
                     {lines.map((_, index) => (
-                        <div className='line-number'>{index + 1}</div>
+                        <div key={index} className='line-number'>{index + 1}</div>
                     ))}
                 </div>
                 <div className='text-area-container'>
                     <textarea
+                        spellCheck="false"
                         className="converter-text"
                         wrap='off'
                         value={convertedText}

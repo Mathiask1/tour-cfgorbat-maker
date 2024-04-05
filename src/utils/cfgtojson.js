@@ -11,6 +11,9 @@ function armaConfigToJSON(armaData) {
 	let classStack = []; // Stack to keep track of parent classes
 	let depth = 0; // Track the depth of the current class
 	let isClassBracket = false;
+	let currentAttributeName = null;
+	let currentAttributeValue = null;
+	let isAttribute = false;
 
 	for (let index = 0; index < lines.length; index++) {
 		let line = lines[index].trim();
@@ -34,33 +37,63 @@ function armaConfigToJSON(armaData) {
 			classStack.push(currentClass);
 			depth++;
 			isClassBracket = true;
-		} else if (line.includes('{')) {
+		} 
+		if (line.includes('{')) {
 			// Do nothing for opening brace
 			if (line.includes("=")) {
 				isClassBracket = false;
 			}
-		} else if (line.includes('};')) {
+		}
+		if (line.includes("=")) {
+			//const attributeMatch = line.match(/^\s*([^=]+)\s*=\s*"?([^";]+)"?;/);
+			currentAttributeName = line.split("=")[0];
+			if (currentAttributeName) {
+				currentAttributeValue = line;
+				isAttribute = true;
+				//console.log(currentAttributeName);
+			}
+		} else if (isAttribute) {
+			currentAttributeValue += line;
+		}
+		
+
+		if (line.includes('}')) {
 			if (depth > 0 && isClassBracket) {
 				classStack.pop();
 				depth--;
 			} else {
 				isClassBracket = true;
 			}
-		} else {
-			const attributeMatch = line.match(/^\s*([^=]+)\s*=\s*"?([^";]+)"?;/);
-			if (attributeMatch) {
-				const attributeName = attributeMatch[1].trim();
-				const attributeValue = attributeMatch[2];
-				const currentClass = classStack[classStack.length - 1];
-				if (attributeName in resetCurrentAttributes() && attributeName !== "subordinates") { // Check if the attribute is not "subordinates"
-					currentClass[attributeName] = attributeValue; // Assign attribute to the current class
-				}
-			}
 		}
+		if (line.includes(';')) {
+			isAttribute = false;
+			if (currentAttributeValue) {
+				//currentAttributeValue = currentAttributeValue.replace(/\s+/g, ' ').trim();
+				let matches = currentAttributeValue.match(/([^=]+)\s*=\s*("[^"]+"|\{[^}]+\}|\S+);/g);
+
+				if (matches) {
+				  let parts = matches.map(match => match.split("=").map(part => part.trim()))[0];
+				  currentAttributeName = parts[0];
+				  currentAttributeValue = parts[1];
+				  currentAttributeValue = currentAttributeValue.replace(/\\/g, "").replace(/"/g, "").replace(";","");
+				}
+				
+                // For "tags" attribute, remove curly braces and split by comma
+                if (currentAttributeName === "tags") {
+                    currentAttributeValue = currentAttributeValue.replace(/[{}]/g, "").split(',').map(tag => tag.trim());
+                }
+
+                const currentClass = classStack[classStack.length - 1];
+                currentClass[currentAttributeName] = currentAttributeValue;
+                currentAttributeName = null;
+                currentAttributeValue = null;
+			}
+
+		}
+
 
 	}
 
-	jsonData = jsonData.filter(Boolean);
 	return JSON.stringify(jsonData, null, 2);
 }
 
@@ -78,6 +111,10 @@ function resetCurrentAttributes(className) {
 		text: "",
 		textShort: "",
 		description: "",
+		insignia: "",
+		color: "",
+		colorInsignia: [],
+		tags: [],
 		subordinates: []
 	};
 }
@@ -86,6 +123,7 @@ export function convertToJson(cfgText) {
 	const jsonData = armaConfigToJSON(cfgText);
 	return jsonData;
 }
+
 /*
 // Example Arma 3 config string
 const armaConfigString = `
