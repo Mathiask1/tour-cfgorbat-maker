@@ -83,6 +83,7 @@ const Converter = ({ orgData, setOrgData, fetchOrgData, saveToSessionStorage }) 
                 </div>
                 <div className='text-area-container'>
                     <textarea
+                        spellcheck="false"
                         className="converter-text"
                         wrap='off'
                         value={convertedText}
