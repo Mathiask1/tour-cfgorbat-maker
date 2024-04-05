@@ -109,6 +109,35 @@ button:hover {
 
 .buttons-container {
   display: flex;
-  justify-content: left; /* Center the buttons horizontally */
-  margin-top: 10px; /* Adjust as needed */
+  justify-content: left;
+  /* Center the buttons horizontally */
+  margin-top: 10px;
+  /* Adjust as needed */
+}
+
+/*navbar*/
+ul.navbar {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #333;
+  position: sticky;
+}
+
+li.navbar {
+  float: left;
+}
+
+li.navbar a {
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 50px;
+}
+
+li.navbar a:hover {
+  background-color: black;
 }
