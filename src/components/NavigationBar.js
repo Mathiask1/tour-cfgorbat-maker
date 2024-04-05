@@ -4,9 +4,9 @@ import '../styles/App.css';
 
 function NavigationBar() {
   return (
-    <nav className='navBar'>
-      <ul>
-        <li><Link to="/">Home</Link></li>
+    <nav>
+      <ul className='navbar'>
+        <li className='navbar'><Link to="/">Home</Link></li>
       </ul>
     </nav>
   );

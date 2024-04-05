@@ -133,9 +133,9 @@ li.navbar a {
   display: block;
   color: white;
   text-align: center;
-  padding: 14px 16px;
+  padding: 5px 16px;
   text-decoration: none;
-  font-size: 50px;
+  font-size: 20px;
 }
 
 li.navbar a:hover {
