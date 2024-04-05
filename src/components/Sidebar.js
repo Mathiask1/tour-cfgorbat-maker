@@ -1,4 +1,6 @@
 import '../styles/sidebar.css';
+import '../styles/TagsInput.css';
+
 import React, { useState, useEffect } from 'react';
 
 const Sidebar = ({ selectedNode, onNodeUpdate, onNodeDelete, onNodeAdd }) => {
@@ -22,18 +24,31 @@ const Sidebar = ({ selectedNode, onNodeUpdate, onNodeDelete, onNodeAdd }) => {
             subordinates: []
         };
     }
-    const [formData, setFormData] = useState({defaultAttributes});
+
+    const [formData, setFormData] = useState(defaultAttributes());
+    const [tags, setTags] = useState([]);
+
+    function handleKeyDown(e) {
+        if (e.key !== 'Enter') return
+        const value = e.target.value
+        if (!value.trim()) return
+        setTags([...tags, value])
+        console.log(tags);
+        e.target.value = ''
+    }
+
+    function removeTag(index) {
+        setTags(tags.filter((el, i) => i !== index))
+    }
 
     useEffect(() => {
         if (selectedNode) {
-            for (let key in defaultAttributes()) {
-                if (!selectedNode[key]) {
-                    selectedNode[key] = defaultAttributes()[key];
-                }
-            }
-            setFormData(selectedNode);
+            const updatedFormData = { ...defaultAttributes(), ...selectedNode };
+            setTags(updatedFormData.tags);
+            setFormData(updatedFormData);
         } else {
-            setFormData({defaultAttributes})
+            setTags([]);
+            setFormData(defaultAttributes());
         }
     }, [selectedNode]);
 
@@ -47,29 +62,32 @@ const Sidebar = ({ selectedNode, onNodeUpdate, onNodeDelete, onNodeAdd }) => {
     const handleChange = (e) => {
         const { name, value } = e.target;
         let parsedValue = value;
-    
+
         if (name.toLowerCase() === 'commanderrank') {
             parsedValue = value.toLowerCase();
         } else if (name.toLowerCase() === 'colorinsignia') {
             parsedValue = value.trim().split(/[,\s]+/) // Trim input value before splitting
                 .map(str => parseInt(str.trim(), 10))
                 .filter(num => !isNaN(num));
+        } else if (name.toLowerCase() === 'tags') {
+            parsedValue = tags;
+            console.log(parsedValue);
         } else if (name.toLowerCase() === 'id' || name.toLowerCase() === 'idtype') {
             parsedValue = parseInt(value);
             console.log(parsedValue);
         }
-    
+
         const updatedFormData = { ...formData, [name]: parsedValue };
-    
+
         if (name === 'textShort') {
             const cfgName = generateCfgName(updatedFormData.id, value);
             updatedFormData.cfgName = cfgName;
         }
-    
+
         setFormData(updatedFormData);
         updateCfgNameRecursively(updatedFormData);
     };
-    
+
 
     const updateCfgNameRecursively = (node) => {
         const cfgName = generateCfgName(node.id, node.textShort);
@@ -85,6 +103,7 @@ const Sidebar = ({ selectedNode, onNodeUpdate, onNodeDelete, onNodeAdd }) => {
     const handleUpdate = (e) => {
         e.preventDefault();
         const action = e.target.name;
+        formData.tags = tags;
         if (action === 'updateButton') {
             onNodeUpdate(formData);
         } else if (action === 'deleteButton') {
@@ -224,13 +243,40 @@ const Sidebar = ({ selectedNode, onNodeUpdate, onNodeDelete, onNodeAdd }) => {
                 </div>
                 <div className="label-input">
                     <label htmlFor="tags">Tags:</label>
+                    <div className="tags-input-container">
+                        <input onKeyDown={handleKeyDown} type="text" className="tags-input" placeholder="Type something" />
+                        <div className='tags-list-container'>
+                            {tags.map((tag, index) => (
+                                <div className="tag-item" key={index}>
+                                    <span className="text">{tag}</span>
+                                    <span className="close" onClick={() => removeTag(index)}>&times;</span>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+                <div className="label-input">
+                    <label htmlFor="tags">Tags:</label>
                     <input className="input-sidebar" type="text" id="tags" name="tags" value={formData.tags} onChange={handleChange} />
                 </div>
 
                 <div className='sidebar-Buttons'>
-                    <button name="addButton" onClick={handleUpdate}>Add</button>
-                    <button name="updateButton" onClick={handleUpdate}>Update</button>
-                    <button name="deleteButton" onClick={handleUpdate}>Delete</button>
+                    <button name="addButton" onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                            e.preventDefault();
+                        }
+                    }}
+                        onClick={handleUpdate}>Add</button>
+                    <button name="updateButton" onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                            e.preventDefault();
+                        }
+                    }} onClick={handleUpdate}>Update</button>
+                    <button name="deleteButton" onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                            e.preventDefault();
+                        }
+                    }} onClick={handleUpdate}>Delete</button>
                 </div>
             </form>
 

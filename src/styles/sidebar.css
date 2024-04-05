@@ -18,7 +18,10 @@ h2 {
 }
 
 label {
+  display: flex;
   margin-right: 10px;
+  min-width: 30%;
+  justify-self: baseline;
 }
 
 .input-sidebar {

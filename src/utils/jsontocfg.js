@@ -28,6 +28,7 @@ export function convertJsonToCfgORBAT(jsonData) {
                         cfgString += `${indent}\t${key} = {${obj[key]}};\n`;
                         break;
                     case "tags":
+                        cfgString += `${indent}\t${key}[] = {${obj[key].map(item => `"${item}"`).join(', ')}};\n`;
                         break;
                     default:
                         cfgString += `${indent}\t${key} = ${JSON.stringify(obj[key])};\n`;
