@@ -104,12 +104,14 @@ const Sidebar = ({ selectedNode, onNodeUpdate, onNodeDelete, onNodeAdd }) => {
         e.preventDefault();
         const action = e.target.name;
         formData.tags = tags;
-        if (action === 'updateButton') {
+        if (action === 'updateButton' && selectedNode) {
             onNodeUpdate(formData);
-        } else if (action === 'deleteButton') {
+        } else if (action === 'deleteButton' && selectedNode) {
             onNodeDelete(formData.cfgName);
         } else if (action === 'addButton') {
-            onNodeAdd(formData);
+            if (!formData.cfgName === "") {
+                onNodeAdd(formData);
+            }
         } else {
             // Handle other actions
         }
@@ -254,10 +256,6 @@ const Sidebar = ({ selectedNode, onNodeUpdate, onNodeDelete, onNodeAdd }) => {
                             ))}
                         </div>
                     </div>
-                </div>
-                <div className="label-input">
-                    <label htmlFor="tags">Tags:</label>
-                    <input className="input-sidebar" type="text" id="tags" name="tags" value={formData.tags} onChange={handleChange} />
                 </div>
 
                 <div className='sidebar-Buttons'>

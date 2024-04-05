@@ -4,6 +4,13 @@
     padding-bottom: 25px;
 }
 
+@media (max-width: 768px) {
+    .converter {
+        width: auto;
+        max-width: 90%;
+    }
+  }
+
 .line-number-text-area-container {
     display: inline-grid;
     grid-template-columns: 3em auto;
@@ -14,6 +21,7 @@
     max-height: 500px;
     min-width: 90%;
     min-height: 500px;
+    padding-bottom: 15px;
 }
 
 
@@ -43,7 +51,7 @@
     border: 0;
     background: transparent;
     color: #fff;
-    min-width: 500px;
+    min-width: 90%;
     outline: none;
     resize: none;
     padding-right: 10px;
