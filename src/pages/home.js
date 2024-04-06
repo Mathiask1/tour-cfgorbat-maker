@@ -58,16 +58,49 @@ const Home = () => {
   };
 
   const moveNode = async ({ draggedNode, droppedNode }) => {
-    let updatedData = await deleteNodeDataUtil(draggedNode.cfgName, orgData);
+    const isSubordinate = isNodeSubordinate(draggedNode, droppedNode);
+    console.log(isSubordinate)
 
-    if (!droppedNode) {
-      updatedData = ([...updatedData, draggedNode]);
+    if (!isSubordinate) {
+      let updatedData = await deleteNodeDataUtil(draggedNode.cfgName, orgData);
+
+      if (!droppedNode) {
+        updatedData = ([...updatedData, draggedNode]);
+      } else {
+        updatedData = await addNodeToSelectedNode(droppedNode, draggedNode, updatedData);
+      }
+  
+      return updatedData;
     } else {
-      updatedData = await addNodeToSelectedNode(droppedNode, draggedNode, updatedData);
+      return orgData;
     }
-
-    return updatedData;
   };
+
+// Helper function to check if a node is a subordinate of another node
+const isNodeSubordinate = (parentNode, nodeToCheck) => {
+  // Base case: If the parentNode is null or the nodeToCheck is null, return false
+  if (!parentNode || !nodeToCheck) {
+    return false;
+  }
+
+  // Check if nodeToCheck is a direct subordinate of parentNode
+  if (parentNode.subordinates && parentNode.subordinates.some(subordinate => subordinate.cfgName === nodeToCheck.cfgName)) {
+    return true;
+  }
+
+  // Recursively check if nodeToCheck is a subordinate of any child node of parentNode
+  if (parentNode.subordinates) {
+    for (const childNode of parentNode.subordinates) {
+      if (isNodeSubordinate(childNode, nodeToCheck)) {
+        return true;
+      }
+    }
+  }
+
+  // If nodeToCheck is not a subordinate of any child node of parentNode
+  return false;
+};
+
 
   /**
    * Handles the update node operation
