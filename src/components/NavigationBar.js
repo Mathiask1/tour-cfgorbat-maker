@@ -11,8 +11,8 @@ function NavigationBar() {
                     <li className='navbar'><Link to="http://the-tour.info/">TOUR Website</Link></li>
                 </ul>
             </nav>
-            <div>
-                <img src='/images/tour_logo.png' alt="Image1"></img>
+            <div className='navbar-logo'>
+                <img className='navbar' src='tour-cfgorbat-maker/images/tour_logo.png' alt="Image1"></img>
             </div>
         </div>
 
