@@ -48,7 +48,12 @@ function armaConfigToJSON(armaData) {
 			//const attributeMatch = line.match(/^\s*([^=]+)\s*=\s*"?([^";]+)"?;/);
 			currentAttributeName = line.split("=")[0];
 			if (currentAttributeName) {
-				currentAttributeValue = line;
+				if (line.includes("//")) {
+					currentAttributeValue = line.split("//")[0];
+				} else {
+					currentAttributeValue = line;
+				}
+
 				isAttribute = true;
 				//console.log(currentAttributeName);
 			}
@@ -57,7 +62,7 @@ function armaConfigToJSON(armaData) {
 		}
 		
 
-		if (line.includes('}')) {
+		if (line.includes('}' && !isAttribute)) {
 			if (depth > 0 && isClassBracket) {
 				classStack.pop();
 				depth--;
@@ -79,19 +84,19 @@ function armaConfigToJSON(armaData) {
 				}
 				
                 // For "tags" attribute, remove curly braces and split by comma
-                if (currentAttributeName === "tags") {
+                if (currentAttributeName === "tags[]") {
                     currentAttributeValue = currentAttributeValue.replace(/[{}]/g, "").split(',').map(tag => tag.trim());
-                }
+                } 
 
                 const currentClass = classStack[classStack.length - 1];
                 currentClass[currentAttributeName] = currentAttributeValue;
+				console.log(currentAttributeValue);
+
                 currentAttributeName = null;
                 currentAttributeValue = null;
+				
 			}
-
 		}
-
-
 	}
 
 	return JSON.stringify(jsonData, null, 2);
@@ -115,7 +120,8 @@ function resetCurrentAttributes(className) {
 		color: "",
 		colorInsignia: [],
 		tags: [],
-		subordinates: []
+		subordinates: [],
+		assets: []
 	};
 }
 

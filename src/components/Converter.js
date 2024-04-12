@@ -12,8 +12,6 @@ const Converter = ({ orgData, setOrgData, fetchOrgData, saveToSessionStorage }) 
     const textAreaRef = useRef(null); // Define textAreaRef using useRef
     const lines = convertedText.split('\n');
 
-
-
     const handleOnChange = (e) => {
         setConvertedText(e.target.value);
     };
