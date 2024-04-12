@@ -160,7 +160,7 @@ div.navbar-logo {
   max-height: 100%;
   max-width: 10%;
   height: auto;
-  justify-content: end;
+  justify-content: flex-end;
   flex-shrink: 1;
 }
 

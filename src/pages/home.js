@@ -69,37 +69,33 @@ const Home = () => {
       } else {
         updatedData = await addNodeToSelectedNode(droppedNode, draggedNode, updatedData);
       }
-  
+
       return updatedData;
     } else {
       return orgData;
     }
   };
 
-// Helper function to check if a node is a subordinate of another node
-const isNodeSubordinate = (parentNode, nodeToCheck) => {
-  // Base case: If the parentNode is null or the nodeToCheck is null, return false
-  if (!parentNode || !nodeToCheck) {
-    return false;
-  }
+  // Helper function to check if a node is a subordinate of another node
+  const isNodeSubordinate = (parentNode, nodeToCheck) => {
+    if (!parentNode || !nodeToCheck) {
+      return false;
+    }
 
-  // Check if nodeToCheck is a direct subordinate of parentNode
-  if (parentNode.subordinates && parentNode.subordinates.some(subordinate => subordinate.cfgName === nodeToCheck.cfgName)) {
-    return true;
-  }
+    if (parentNode.subordinates && parentNode.subordinates.some(subordinate => subordinate.cfgName === nodeToCheck.cfgName)) {
+      return true;
+    }
 
-  // Recursively check if nodeToCheck is a subordinate of any child node of parentNode
-  if (parentNode.subordinates) {
-    for (const childNode of parentNode.subordinates) {
-      if (isNodeSubordinate(childNode, nodeToCheck)) {
-        return true;
+    if (parentNode.subordinates) {
+      for (const childNode of parentNode.subordinates) {
+        if (isNodeSubordinate(childNode, nodeToCheck)) {
+          return true;
+        }
       }
     }
-  }
 
-  // If nodeToCheck is not a subordinate of any child node of parentNode
-  return false;
-};
+    return false;
+  };
 
 
   /**
