@@ -10,7 +10,6 @@ function armaConfigToJSON(armaData) {
 	const lines = armaData.split('\n');
 	let classStack = []; // Stack to keep track of parent classes
 	let depth = 0; // Track the depth of the current class
-	let isClassBracket = false;
 	let currentAttributeName = null;
 	let currentAttributeValue = null;
 	let isAttribute = false;
@@ -36,13 +35,9 @@ function armaConfigToJSON(armaData) {
 			}
 			classStack.push(currentClass);
 			depth++;
-			isClassBracket = true;
 		}
 		if (line.includes('{')) {
 			// Do nothing for opening brace
-			if (line.includes("=")) {
-				isClassBracket = false;
-			}
 		}
 		if (line.includes("=")) {
 			//const attributeMatch = line.match(/^\s*([^=]+)\s*=\s*"?([^";]+)"?;/);
@@ -66,9 +61,7 @@ function armaConfigToJSON(armaData) {
 			if (depth > 0 && !isAttribute) {
 				classStack.pop();
 				depth--;
-			} else {
-				isClassBracket = true;
-			}
+			} 
 		}
 		if (line.includes(';')) {
 			isAttribute = false;
