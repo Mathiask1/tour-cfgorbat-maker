@@ -20,6 +20,8 @@ const Home = () => {
         const data = storedOrgData ? JSON.parse(storedOrgData) : await fetchOrgData();
         saveToSessionStorage(data);
         setOrgData(data);
+        const uniqueNodeIds = Array.from(new Set(orgData.flatMap((node) => extractAllNodeIds(node))));
+        setAllNodeIds(uniqueNodeIds);
       } catch (error) {
         console.error('Error fetching orgData:', error);
       }
@@ -109,6 +111,8 @@ const Home = () => {
     const updatedOrgData = updateNodeInData(orgData, editedNodeData, selectedNode);
     setOrgData(updatedOrgData);
     saveToSessionStorage(updatedOrgData);
+    const uniqueNodeIds = Array.from(new Set(updatedOrgData.flatMap((node) => extractAllNodeIds(node))));
+    setAllNodeIds(uniqueNodeIds);
   };
 
   const updateNodeInData = (data, editedNodeData, selectedNode) => {
@@ -140,6 +144,8 @@ const Home = () => {
     }
     setOrgData(updatedData);
     saveToSessionStorage(updatedData);
+    const uniqueNodeIds = Array.from(new Set(updatedData.flatMap((node) => extractAllNodeIds(node))));
+    setAllNodeIds(uniqueNodeIds);
   };
 
   const deleteNodeDataUtil = (cfgName, data) => {
@@ -237,7 +243,8 @@ const Home = () => {
             onNodeUpdate={updateNodeData}
             saveToSessionStorage={saveToSessionStorage}
             onNodeDelete={deleteNodeData}
-            onNodeAdd={addNode} />
+            onNodeAdd={addNode} 
+            allNodeIds={allNodeIds}/>
         </div>
         <div className="org-chart" >
           <OrgChart data={orgData}

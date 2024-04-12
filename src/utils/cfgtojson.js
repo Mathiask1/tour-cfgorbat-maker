@@ -37,7 +37,7 @@ function armaConfigToJSON(armaData) {
 			classStack.push(currentClass);
 			depth++;
 			isClassBracket = true;
-		} 
+		}
 		if (line.includes('{')) {
 			// Do nothing for opening brace
 			if (line.includes("=")) {
@@ -60,10 +60,10 @@ function armaConfigToJSON(armaData) {
 		} else if (isAttribute) {
 			currentAttributeValue += line;
 		}
-		
 
-		if (line.includes('}' && !isAttribute)) {
-			if (depth > 0 && isClassBracket) {
+
+		if (line.includes('}')) {
+			if (depth > 0 && !isAttribute) {
 				classStack.pop();
 				depth--;
 			} else {
@@ -73,28 +73,29 @@ function armaConfigToJSON(armaData) {
 		if (line.includes(';')) {
 			isAttribute = false;
 			if (currentAttributeValue) {
-				//currentAttributeValue = currentAttributeValue.replace(/\s+/g, ' ').trim();
+				currentAttributeValue = currentAttributeValue.replace(/\s+/g, ' ').trim();
 				let matches = currentAttributeValue.match(/([^=]+)\s*=\s*("[^"]+"|\{[^}]+\}|\S+);/g);
 
 				if (matches) {
-				  let parts = matches.map(match => match.split("=").map(part => part.trim()))[0];
-				  currentAttributeName = parts[0];
-				  currentAttributeValue = parts[1];
-				  currentAttributeValue = currentAttributeValue.replace(/\\/g, "").replace(/"/g, "").replace(";","");
+					let parts = matches.map(match => match.split("=").map(part => part.trim()))[0];
+					currentAttributeName = parts[0];
+					currentAttributeValue = parts[1];
+					currentAttributeValue = currentAttributeValue.replace(/\\/g, "").replace(/"/g, "").replace(";", "");
 				}
-				
-                // For "tags" attribute, remove curly braces and split by comma
-                if (currentAttributeName === "tags[]") {
-                    currentAttributeValue = currentAttributeValue.replace(/[{}]/g, "").split(',').map(tag => tag.trim());
-                } 
 
-                const currentClass = classStack[classStack.length - 1];
-                currentClass[currentAttributeName] = currentAttributeValue;
-				console.log(currentAttributeValue);
-
-                currentAttributeName = null;
-                currentAttributeValue = null;
-				
+				// For "tags" attribute, remove curly braces and split by comma
+				if (currentAttributeName.toLowerCase() === "tags[]") {
+					currentAttributeValue = currentAttributeValue.replace(/[{}]/g, "").split(',').map(tag => tag.trim());
+					currentAttributeName = "tags";
+				} else if (currentAttributeName.toLowerCase() === "colorinsignia[]") {
+					currentAttributeValue = currentAttributeValue.replace(/[{}]/g, "").split(',').map(tag => tag.trim());
+					console.log(currentAttributeValue);
+					currentAttributeName = "colorInsignia";
+				}
+				const currentClass = classStack[classStack.length - 1];
+				currentClass[currentAttributeName] = currentAttributeValue;
+				currentAttributeName = null;
+				currentAttributeValue = null;
 			}
 		}
 	}
