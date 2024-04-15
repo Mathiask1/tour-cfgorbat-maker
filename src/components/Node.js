@@ -1,7 +1,7 @@
 import React from 'react';
 import '../styles/App.css';
 
-const Node = ({ data, onClick, selectedNode, handleDrag, setDroppedNode, setDraggedNode,  getNodeData }) => {
+const Node = ({ data, onClick, selectedNode, handleDrag, setDroppedNode, setDraggedNode, getNodeData }) => {
   const handleClick = (e) => {
     e.stopPropagation();
     if (e.target.classList.contains("nodeDiv")) {

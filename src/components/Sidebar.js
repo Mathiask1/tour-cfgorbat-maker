@@ -109,7 +109,7 @@ const Sidebar = ({ selectedNode, onNodeUpdate, onNodeDelete, onNodeAdd }) => {
         } else if (action === 'deleteButton' && selectedNode) {
             onNodeDelete(formData.cfgName);
         } else if (action === 'addButton') {
-            if (!formData.cfgName === "") {
+            if (!(formData.cfgName === "")) {
                 onNodeAdd(formData);
             }
         } else {

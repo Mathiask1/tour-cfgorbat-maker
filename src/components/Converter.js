@@ -9,14 +9,8 @@ import { convertToJson } from '../utils/cfgtojson.js';
 
 const Converter = ({ orgData, setOrgData, fetchOrgData, saveToSessionStorage }) => {
     const [convertedText, setConvertedText] = useState('');
-    const [converterType, setConverterType] = useState("JsonToCfg");
-    const [lineNumbers, setLineNumbers] = useState(0);
     const textAreaRef = useRef(null); // Define textAreaRef using useRef
     const lines = convertedText.split('\n');
-
-    const handleConverterTypeChange = (event) => {
-        setConverterType(event.target.value);
-    };
 
     const handleOnChange = (e) => {
         setConvertedText(e.target.value);
@@ -24,10 +18,11 @@ const Converter = ({ orgData, setOrgData, fetchOrgData, saveToSessionStorage }) 
 
     const handleConvert = (e) => {
         e.preventDefault();
-        if (converterType === "JsonToCfg") {
+        const action = e.target.name;
+        if (action === "exportButton") {
             const text = convertJsonToCfgORBAT(orgData);
             setConvertedText(text);
-        } else if (converterType === "CfgToJson") {
+        } else if (action === "importButton") {
             const text = convertToJson(convertedText);
             setOrgData(JSON.parse(text));
         }
@@ -57,24 +52,8 @@ const Converter = ({ orgData, setOrgData, fetchOrgData, saveToSessionStorage }) 
         }
     };
 
-    const updateRowNumbering = () => {
-        const num = convertedText.split('\n').length;
-        setLineNumbers(num);
-    };
-
-
     return (
         <div className="converter">
-            <div>
-                <label>
-                    <input type="radio" value="JsonToCfg" checked={converterType === "JsonToCfg"} onChange={handleConverterTypeChange} />
-                    Export (JSON to CfgORBAT)
-                </label>
-                <label>
-                    <input type="radio" value="CfgToJson" checked={converterType === "CfgToJson"} onChange={handleConverterTypeChange} />
-                    Import (Convert CfgORBAT to JSON)
-                </label>
-            </div>
             <div className="line-number-text-area-container">
                 <div className="numbers">
                     {lines.map((_, index) => (
@@ -90,12 +69,13 @@ const Converter = ({ orgData, setOrgData, fetchOrgData, saveToSessionStorage }) 
                         onChange={handleOnChange}
                         onKeyDown={handleTab}
                         ref={textAreaRef}
-                        placeholder={converterType === "JsonToCfg" ? "Hit convert to export CfgOrbat." : "Enter CfgORBAT here, and hit convert"}
+                        placeholder="Enter your cfgOrbat here"
                     />
                 </div>
             </div>
             <div className="buttons-container">
-                <button name="convertButton" onClick={handleConvert}>Convert</button>
+                <button name="importButton" onClick={handleConvert}>Import from CfgORBAT</button>
+                <button name="exportButton" onClick={handleConvert}>Export to CfgOrbat</button>
                 <button name="convertButton" onClick={importDefault}>Import Default</button>
             </div>
         </div>

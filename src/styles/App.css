@@ -99,7 +99,6 @@ button {
   letter-spacing: .02em;
   position: relative;
   margin: 0 10px 0 0;
-  /* Top, Right, Bottom, Left */
 }
 
 button:hover {
@@ -109,6 +108,59 @@ button:hover {
 
 .buttons-container {
   display: flex;
-  justify-content: left; /* Center the buttons horizontally */
-  margin-top: 10px; /* Adjust as needed */
+  justify-content: left;
+  margin-top: 10px;
+}
+
+/*navbar*/
+ul.navbar {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  min-width: 200px;
+  overflow: hidden;
+  background-color: #333;
+  position: sticky;
+}
+
+li.navbar {
+  float: left;
+}
+
+li.navbar a {
+  font-family: sans-serif;
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 5px 16px;
+  text-decoration: none;
+  font-size: 20px;
+}
+
+li.navbar a:hover {
+  background-color: black;
+}
+
+div.navbar {
+  display: flex;
+  justify-content: space-between;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  max-height: 40px;
+  overflow: hidden;
+  background-color: #333;
+}
+
+div.navbar-right {
+  display: flex;
+  max-height: 100%;
+  max-width: 10%;
+  height: auto;
+  justify-content: flex-end;
+  flex-shrink: 1;
+}
+
+img.navbar {
+  max-height: 100%;
 }

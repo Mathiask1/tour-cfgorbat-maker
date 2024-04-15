@@ -10,7 +10,6 @@ function armaConfigToJSON(armaData) {
 	const lines = armaData.split('\n');
 	let classStack = []; // Stack to keep track of parent classes
 	let depth = 0; // Track the depth of the current class
-	let isClassBracket = false;
 	let currentAttributeName = null;
 	let currentAttributeValue = null;
 	let isAttribute = false;
@@ -36,62 +35,56 @@ function armaConfigToJSON(armaData) {
 			}
 			classStack.push(currentClass);
 			depth++;
-			isClassBracket = true;
-		} 
-		if (line.includes('{')) {
-			// Do nothing for opening brace
-			if (line.includes("=")) {
-				isClassBracket = false;
-			}
 		}
 		if (line.includes("=")) {
-			//const attributeMatch = line.match(/^\s*([^=]+)\s*=\s*"?([^";]+)"?;/);
 			currentAttributeName = line.split("=")[0];
 			if (currentAttributeName) {
-				currentAttributeValue = line;
+				if (line.includes("//")) {
+					currentAttributeValue = line.split("//")[0];
+				} else {
+					currentAttributeValue = line;
+				}
+
 				isAttribute = true;
-				//console.log(currentAttributeName);
 			}
 		} else if (isAttribute) {
 			currentAttributeValue += line;
 		}
-		
+
 
 		if (line.includes('}')) {
-			if (depth > 0 && isClassBracket) {
+			if (depth > 0 && !isAttribute) {
 				classStack.pop();
 				depth--;
-			} else {
-				isClassBracket = true;
-			}
+			} 
 		}
 		if (line.includes(';')) {
 			isAttribute = false;
 			if (currentAttributeValue) {
-				//currentAttributeValue = currentAttributeValue.replace(/\s+/g, ' ').trim();
+				currentAttributeValue = currentAttributeValue.replace(/\s+/g, ' ').trim();
 				let matches = currentAttributeValue.match(/([^=]+)\s*=\s*("[^"]+"|\{[^}]+\}|\S+);/g);
 
 				if (matches) {
-				  let parts = matches.map(match => match.split("=").map(part => part.trim()))[0];
-				  currentAttributeName = parts[0];
-				  currentAttributeValue = parts[1];
-				  currentAttributeValue = currentAttributeValue.replace(/\\/g, "").replace(/"/g, "").replace(";","");
+					let parts = matches.map(match => match.split("=").map(part => part.trim()))[0];
+					currentAttributeName = parts[0];
+					currentAttributeValue = parts[1];
+					currentAttributeValue = currentAttributeValue.replace(/\\/g, "").replace(/"/g, "").replace(";", "");
 				}
-				
-                // For "tags" attribute, remove curly braces and split by comma
-                if (currentAttributeName === "tags") {
-                    currentAttributeValue = currentAttributeValue.replace(/[{}]/g, "").split(',').map(tag => tag.trim());
-                }
 
-                const currentClass = classStack[classStack.length - 1];
-                currentClass[currentAttributeName] = currentAttributeValue;
-                currentAttributeName = null;
-                currentAttributeValue = null;
+				if (currentAttributeName.toLowerCase() === "tags[]") {
+					currentAttributeValue = currentAttributeValue.replace(/[{}]/g, "").split(',').map(tag => tag.trim());
+					currentAttributeName = "tags";
+				} else if (currentAttributeName.toLowerCase() === "colorinsignia[]") {
+					currentAttributeValue = currentAttributeValue.replace(/[{}]/g, "").split(',').map(tag => tag.trim());
+					console.log(currentAttributeValue);
+					currentAttributeName = "colorInsignia";
+				}
+				const currentClass = classStack[classStack.length - 1];
+				currentClass[currentAttributeName] = currentAttributeValue;
+				currentAttributeName = null;
+				currentAttributeValue = null;
 			}
-
 		}
-
-
 	}
 
 	return JSON.stringify(jsonData, null, 2);
@@ -115,7 +108,8 @@ function resetCurrentAttributes(className) {
 		color: "",
 		colorInsignia: [],
 		tags: [],
-		subordinates: []
+		subordinates: [],
+		assets: []
 	};
 }
 
