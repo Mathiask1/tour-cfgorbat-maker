@@ -23,6 +23,8 @@ const helpModal = () => {
                         Imports should follow the standard as provided by the default template. While the importer can convert most of the inputs I've given it, it cannot correctly convert inputs which use the "subordinates[] = {curlyBraces}" attribute, to define the structure. It has to be nested classes.
                         <br /><br />
                         Comments should not be an issue, but isn't recommended.
+                        <br /><br />
+                        If you're in doubt, reffer to https://community.bistudio.com/wiki/Arma_3:_ORBAT_Viewer for information regarding CfgOrbats.
                     </div>
                     <div className="header"> How To Use </div>
                     <div className="content">
