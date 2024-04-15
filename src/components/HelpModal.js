@@ -21,7 +21,7 @@ const helpModal = () => {
                         This website is meant to ease the creation of orders of battles for the game Arma 3, by converting CfgOrbat classes into a more readable and structured format.
                         <br /><br />
                         Imports should follow the standard as provided by the default template. While the importer can convert most of the inputs I've given it, it cannot correctly convert inputs which use the "subordinates[] = {curlyBraces}" attribute, to define the structure. It has to be nested classes.
-                        <br/><br/>
+                        <br /><br />
                         Comments should not be an issue, but isn't recommended.
                     </div>
                     <div className="header"> How To Use </div>
@@ -34,7 +34,7 @@ const helpModal = () => {
                         <br /><br />
                         Tags can be added by writing your tag, and then hitting enter.
                         <br /><br />
-                        CfgName is automatically updated from the ID and Text Short attributes. 
+                        CfgName is automatically updated from the ID and Text Short attributes.
                     </div>
 
                     <div className="actions">

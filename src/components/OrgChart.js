@@ -32,9 +32,6 @@ const OrgChart = ({ data, setSelectedNode, selectedNode, handleDrag, getNodeData
         };
     }, [setSelectedNode]);
 
-
-
-
     return (
         <div ref={orgChartRef} >
             <h2>Order of Battle</h2>

@@ -36,11 +36,7 @@ function armaConfigToJSON(armaData) {
 			classStack.push(currentClass);
 			depth++;
 		}
-		if (line.includes('{')) {
-			// Do nothing for opening brace
-		}
 		if (line.includes("=")) {
-			//const attributeMatch = line.match(/^\s*([^=]+)\s*=\s*"?([^";]+)"?;/);
 			currentAttributeName = line.split("=")[0];
 			if (currentAttributeName) {
 				if (line.includes("//")) {
@@ -50,7 +46,6 @@ function armaConfigToJSON(armaData) {
 				}
 
 				isAttribute = true;
-				//console.log(currentAttributeName);
 			}
 		} else if (isAttribute) {
 			currentAttributeValue += line;
@@ -76,7 +71,6 @@ function armaConfigToJSON(armaData) {
 					currentAttributeValue = currentAttributeValue.replace(/\\/g, "").replace(/"/g, "").replace(";", "");
 				}
 
-				// For "tags" attribute, remove curly braces and split by comma
 				if (currentAttributeName.toLowerCase() === "tags[]") {
 					currentAttributeValue = currentAttributeValue.replace(/[{}]/g, "").split(',').map(tag => tag.trim());
 					currentAttributeName = "tags";

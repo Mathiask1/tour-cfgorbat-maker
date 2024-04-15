@@ -33,12 +33,6 @@ export function convertJsonToCfgORBAT(jsonData) {
                     default:
                         cfgString += `${indent}\t${key} = ${JSON.stringify(obj[key])};\n`;
                 }
-                /*
-                if (key.toLowerCase() === "id" || key.toLowerCase() === "idtype") {
-                    cfgString += `${indent}\t${key} = ${parseInt(obj[key])};\n`;
-                } else {
-                    cfgString += `${indent}\t${key} = ${JSON.stringify(obj[key])};\n`;
-                }*/
             }
         });
 

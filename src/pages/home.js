@@ -243,8 +243,8 @@ const Home = () => {
             onNodeUpdate={updateNodeData}
             saveToSessionStorage={saveToSessionStorage}
             onNodeDelete={deleteNodeData}
-            onNodeAdd={addNode} 
-            allNodeIds={allNodeIds}/>
+            onNodeAdd={addNode}
+            allNodeIds={allNodeIds} />
         </div>
         <div className="org-chart" >
           <OrgChart data={orgData}
