@@ -79,7 +79,7 @@
     "text": "3rd USMC Armor Platoon",
     "textShort": "3rd Arm. Plt.",
     "description": "USMC Armoured Platoon, leading the way.",
-    "insignia": "a3\\missions_f_epa\\data\\img\\orbat\\b_aegis_ca.paa",
+    "insignia": "",
     "color": "ColorWest",
     "colorInsignia": [1, 2, 3, 1],
     "tags": ["3rdArmour"],
