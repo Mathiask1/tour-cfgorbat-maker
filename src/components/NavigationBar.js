@@ -22,7 +22,7 @@ function NavigationBar() {
             </nav>
             <div className='navbar-right'>
                 <HelpModal />
-                <img className='navbar' src='/images/tour_logo.png' alt="Image1"></img>
+                <img className='navbar' src='images/tour_logo.png' alt="TourLogo"></img>
             </div>
         </div>
     );
