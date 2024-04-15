@@ -25,7 +25,7 @@ export function convertJsonToCfgORBAT(jsonData) {
                         cfgString += `${indent}\t${key} = ${parseInt(obj[key])};\n`;
                         break;
                     case "colorinsignia":
-                        cfgString += `${indent}\t${key} = {${obj[key]}};\n`;
+                        cfgString += `${indent}\t${key}[] = {${obj[key]}};\n`;
                         break;
                     case "tags":
                         cfgString += `${indent}\t${key}[] = {${obj[key].map(item => `"${item}"`).join(', ')}};\n`;
