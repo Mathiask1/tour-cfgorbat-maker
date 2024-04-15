@@ -28,7 +28,7 @@ const Home = () => {
     };
 
     fetchData();
-  });
+  }, []);
 
   const fetchOrgData = async () => {
     return data;
