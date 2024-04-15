@@ -33,7 +33,6 @@ const Sidebar = ({ selectedNode, onNodeUpdate, onNodeDelete, onNodeAdd }) => {
         const value = e.target.value
         if (!value.trim()) return
         setTags([...tags, value])
-        console.log(tags);
         e.target.value = ''
     }
 
@@ -71,10 +70,8 @@ const Sidebar = ({ selectedNode, onNodeUpdate, onNodeDelete, onNodeAdd }) => {
                 .filter(num => !isNaN(num));
         } else if (name.toLowerCase() === 'tags') {
             parsedValue = tags;
-            console.log(parsedValue);
         } else if (name.toLowerCase() === 'id' || name.toLowerCase() === 'idtype') {
             parsedValue = parseInt(value);
-            console.log(parsedValue);
         }
 
         const updatedFormData = { ...formData, [name]: parsedValue };

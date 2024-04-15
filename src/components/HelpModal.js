@@ -41,7 +41,6 @@ const helpModal = () => {
                         <button
                             className="modal-button"
                             onClick={() => {
-                                console.log('modal closed ');
                                 close();
                             }}
                         >
