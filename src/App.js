@@ -9,9 +9,9 @@ function App() {
       <Router>
         <Routes>
         <Route path="/tour-cfgorbat-maker" element={<Home />} />
-        <Route path="/" element={<Home />} />
-          <Route path="/404" element={<NotFoundPage />} />
-          <Route path="*" element={<Navigate to="/404" />} />
+        <Route path="/tour-cfgorbat-maker/" element={<Home />} />
+          <Route path="/tour-cfgorbat-maker/404" element={<NotFoundPage />} />
+          <Route path="/tour-cfgorbat-maker/*" element={<Navigate to="/tour-cfgorbat-maker/404" />} />
         </Routes>
       </Router>
     </div>
